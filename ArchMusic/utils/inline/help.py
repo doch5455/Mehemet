@@ -1,6 +1,5 @@
 from typing import Union, Dict
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from ArchMusic import app
 
 def get_close_button(text: str) -> InlineKeyboardButton:
     return InlineKeyboardButton(text=text, callback_data="close")
@@ -16,7 +15,6 @@ def help_panel(localized: Dict[str, str], START: Union[bool, int] = None):
 
     buttons = []
 
-    # Otomatik 2’li gruplama
     for i in range(0, len(help_keys), 2):
         row = []
         for j in range(2):
@@ -30,7 +28,6 @@ def help_panel(localized: Dict[str, str], START: Union[bool, int] = None):
                 )
         buttons.append(row)
 
-    # Navigasyon satırı
     nav_row = (
         [
             get_back_button(localized.get("BACK_BUTTON", "⬅️ Geri")),
