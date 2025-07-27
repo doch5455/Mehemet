@@ -226,29 +226,13 @@ queue_4 : "<blockquote>🎻<b> Sıraya Eklendi **#{0} </blockquote>\n\n<blockquo
 queue_5 : "**Sırada Sadece Bir Parça Var**, **Lütfen Biraz Daha Parça Ekleyin.**"
 
 # All Streaming Lines
-"stream_1": "📻 <b>Radyo Başladı!</b>\n\n"
-            "🎵 <b>Şarkı:</b> <a href=\"{1}\">{0}</a>\n"
-            "⏱️ <b>Süre:</b> <code>{2}</code>\n"
-            "🎙️ <b>İstek:</b> <a href=\"tg://user?id={4}\">{3}</a>\n\n"
-            "📡 Şimdi yayındayız — kulaklığını tak!",
 
-"stream_2": "📻 <b>Yayın Başladı!</b>\n\n"
-            "📼 <b>Başlık:</b> <a href=\"{1}\">{0}</a>\n"
-            "⏱️ <b>Süre:</b> <code>{2}</code>\n"
-            "🎙️ <b>İstek:</b> <a href=\"tg://user?id={4}\">{3}</a>\n\n"
-            "🎧 Keyifli dinlemeler!",
-
-"stream_3": "📻 <b>SoundCloud'dan Yayın!</b>\n\n"
-            "🎶 <b>Şarkı:</b> {0}\n"
-            "⏱️ <b>Süre:</b> <code>{1}</code>\n"
-            "🎙️ <b>İstek:</b> {2}\n\n"
-            "🎧 Dinlemeye devam et!",
-
-"stream_4": "📻 <b>Telegram Dosyasından Yayın</b>\n\n"
-            "🎶 <b>Şarkı:</b> <a href=\"{1}\">{0}</a>\n"
-            "⏱️ <b>Süre:</b> <code>{2}</code>\n"
-            "🎙️ <b>İstek:</b> {3}\n\n"
-            "📡 Radyo açık, kulaklığını tak!"
+stream_1 : "📻 <b>Radyo Başladı!</b>\n\n<b>Şarkı:</b> <a href=\"{1}\">{0}</a>\n⏱️ <b>Süre:</b> <code>{2}</code>\n <b>İstek:</b> <a href=\>tg://user?id={4}\{3}</a>\n\n📡 Şimdi yayındayız — kulaklığını tak!"
+stream_2 : "<b><blockquote>🎻 Müzik Keyfin Hazır! </blockquote></b>\n\n<b><blockquote>🎼<u>Parça <u> :{0}\n<b>🧬<u>Süre<u> :</b> {2} dakika\n<b>👁‍🗨️<u>Dinleyici </b> {3}<b></blockquote>\n<b><blockquote>"
+stream_3 : "🎼 **<u>Şarkı Detayları:**</u>\n\n→ **<u>Şarkı</u>:** __{0}__\n→ **<u>Süre</u>:** __{2}__\n→ **<u>İstek Sahibi</u>:** __{3}__"
+stream_4 : "🎧 **<u>Şimdi Çalan:**</u>\n\n→ **<u>Şarkı Adı</u>:** __{0}__\n→ **<u>Süre</u>:** __{2}__\n→ **<u>Talep</u>:** __{3}__"
+stream_5 : "🎤 **<u>Parça Bilgisi:**</u>\n\n→ **<u>Parça</u>:** __{0}__\n→ **<u>İstekte Bulunan</u>:** __{1}__"
+stream_6 : "📡 **<u>Yayın Başladı:**</u>\n\n→ **<u>Şarkı</u>:** __[{0}]({1})__\n→ **<u>Talep Eden</u>:** __{2}__"
 
 
 # Inline Buttons
@@ -274,15 +258,15 @@ S_B_7 : "sahip ✔︎"
 S_B_8 : "yardım & komutlar ❓ " 
         
 #Help 
-H_B_1 :  "🎭 𝑬𝑻𝑰𝑲𝑬𝑻 𝑲𝑶𝑴𝑼𝑻𝑼"
-H_B_2 :  "🎉 𝑬Ğ𝑳𝑬𝑵Ç𝑬 𝑲𝑶𝑴𝑼𝑻𝑳𝑨𝑹𝑰  "
-H_B_3 :  "🎨 𝑫𝑬ĞİŞ𝑻İ𝑹𝑴𝑬 𝑲𝑶𝑴𝑼𝑻𝑼"
-H_B_4 :  "『🎧 𝑶𝒀𝑵𝑨𝑻𝑴𝑨 𝑲𝑶𝑴𝑼𝑻𝑳𝑨𝑹𝑰  "
-H_B_5 : "📂 𝑶𝒀𝑵𝑨𝑻𝑴𝑨 𝑳İ𝑺𝑻𝑬𝑺İ"
-H_B_6 :  "📥 𝑴Ü𝒁İ𝑲 𝑰𝑵𝑫İ𝑹𝑴𝑬 "
-H_B_7: "🚫𝑬𝑵𝑮𝑬𝑳𝑬𝑴𝑬 𝑳İ𝑺𝑻𝑬𝑺İ "
-H_B_8 :  " 📢 𝑹𝑬𝑲𝑳𝑨𝑴 "
-H_B_9 : " 🤖 𝑩𝑶𝑻 𝑲𝑶𝑴𝑼𝑻𝑳𝑨𝑹𝑰"
+H_B_1 :  "💥ETİKET KOMUTU"
+H_B_2 :  "🟡Eğlence komutları"
+H_B_3 :  "DEĞİSTİRME KOMUTU"
+H_B_4 :  "🥁𝗢𝘆𝗻𝗮𝘁𝗺𝗮 𝗞𝗼𝗺𝘂𝘁𝗹𝗮𝗿ı"
+H_B_5 : "📻OYNATMA LİSTESİ"
+H_B_6 :  "MÜZİK İNDİRME KOMUTU"
+H_B_7: "🚫ENGELEME LİSTESİ"
+H_B_8 :  "📭REKLAM"
+H_B_9 : " BOT KOMUTLARİ"
 
 
 
