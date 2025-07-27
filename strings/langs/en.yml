@@ -226,12 +226,29 @@ queue_4 : "<blockquote>🎻<b> Sıraya Eklendi **#{0} </blockquote>\n\n<blockquo
 queue_5 : "**Sırada Sadece Bir Parça Var**, **Lütfen Biraz Daha Parça Ekleyin.**"
 
 # All Streaming Lines
-stream_1 : "<b><blockquote>🎻 Müzik Keyfin Hazır! </blockquote></b>\n\n<b><blockquote>🎼<u>Parça <u> :{0}\n<b>🧬<u>Süre<u> :</b> {2} dakika\n<b>👁‍🗨️<u>Dinleyici </b> {3}<b></blockquote>\n<b><blockquote>"
-stream_2 : "🎵 **<u>Dinleniyor:**</u>\n\n→ **<u>Parça</u>:** __{0}__\n→ **<u>Süre</u>:** __{2}__\n→ **<u>Talep Eden</u>:** __{3}__"
-stream_3 : "🎼 **<u>Şarkı Detayları:**</u>\n\n→ **<u>Şarkı</u>:** __{0}__\n→ **<u>Süre</u>:** __{2}__\n→ **<u>İstek Sahibi</u>:** __{3}__"
-stream_4 : "🎧 **<u>Şimdi Çalan:**</u>\n\n→ **<u>Şarkı Adı</u>:** __{0}__\n→ **<u>Süre</u>:** __{2}__\n→ **<u>Talep</u>:** __{3}__"
-stream_5 : "🎤 **<u>Parça Bilgisi:**</u>\n\n→ **<u>Parça</u>:** __{0}__\n→ **<u>İstekte Bulunan</u>:** __{1}__"
-stream_6 : "📡 **<u>Yayın Başladı:**</u>\n\n→ **<u>Şarkı</u>:** __[{0}]({1})__\n→ **<u>Talep Eden</u>:** __{2}__"
+"stream_1": "📻 <b>Radyo Başladı!</b>\n\n"
+            "🎵 <b>Şarkı:</b> <a href=\"{1}\">{0}</a>\n"
+            "⏱️ <b>Süre:</b> <code>{2}</code>\n"
+            "🎙️ <b>İstek:</b> <a href=\"tg://user?id={4}\">{3}</a>\n\n"
+            "📡 Şimdi yayındayız — kulaklığını tak!",
+
+"stream_2": "📻 <b>Yayın Başladı!</b>\n\n"
+            "📼 <b>Başlık:</b> <a href=\"{1}\">{0}</a>\n"
+            "⏱️ <b>Süre:</b> <code>{2}</code>\n"
+            "🎙️ <b>İstek:</b> <a href=\"tg://user?id={4}\">{3}</a>\n\n"
+            "🎧 Keyifli dinlemeler!",
+
+"stream_3": "📻 <b>SoundCloud'dan Yayın!</b>\n\n"
+            "🎶 <b>Şarkı:</b> {0}\n"
+            "⏱️ <b>Süre:</b> <code>{1}</code>\n"
+            "🎙️ <b>İstek:</b> {2}\n\n"
+            "🎧 Dinlemeye devam et!",
+
+"stream_4": "📻 <b>Telegram Dosyasından Yayın</b>\n\n"
+            "🎶 <b>Şarkı:</b> <a href=\"{1}\">{0}</a>\n"
+            "⏱️ <b>Süre:</b> <code>{2}</code>\n"
+            "🎙️ <b>İstek:</b> {3}\n\n"
+            "📡 Radyo açık, kulaklığını tak!"
 
 
 # Inline Buttons
