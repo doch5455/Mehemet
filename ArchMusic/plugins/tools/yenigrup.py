@@ -30,22 +30,25 @@ async def send_log(text: str, user_id: int = None, chat=None):
         if user_id:
             await download_user_photo(user_id)
 
-        # Grup bilgileri
         if chat:
+            # Üye sayısı alınmaya çalışılıyor, hata olursa atla
             try:
                 members = await app.get_chat_members_count(chat.id)
                 text += f"\n👥 Üye Sayısı: {members}"
-            except Exception as e:
-                text += f"\n👥 Üye Sayısı: Alınamadı ({e})"
+            except Exception:
+                pass
 
+            # Grup linki alınmaya çalışılıyor, hata olursa atla
             try:
-                link = f"https://t.me/{chat.username}" if chat.username else None
-                if not link:
+                if chat.username:
+                    link = f"https://t.me/{chat.username}"
+                else:
                     full_chat = await app.get_chat(chat.id)
                     link = full_chat.invite_link
-                text += f"\n🔗 Grup Linki: {link if link else 'Yok veya alınamadı'}"
-            except Exception as e:
-                text += f"\n🔗 Grup Linki: Alınamadı ({e})"
+                if link:
+                    text += f"\n🔗 Grup Linki: {link}"
+            except Exception:
+                pass
 
         await app.send_message(LOG_GROUP_ID, f"🕒 `{timestamp}`\n\n{text}")
 
@@ -111,7 +114,9 @@ async def on_chat_member_update(client: Client, update: ChatMemberUpdated):
     new = update.new_chat_member
     chat = update.chat
 
-    # Güvenli kullanıcı bilgisi alımı
+    if not old or not new or not old.status or not new.status:
+        return
+
     try:
         user = new.user
         mention = user.mention if user else "Bilinmeyen"
