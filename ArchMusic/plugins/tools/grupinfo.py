@@ -1,13 +1,14 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
-from config import LOG_GROUP_ID
+from config import LOG_GROUP_ID  # -100 ile başlayan gerçek ID
 from ArchMusic import app
 
-# ✅ Yardımcı: Log mesajını oluştur
+
+# ✅ Log mesajı oluştur
 async def create_log_message(event_type: str, chat, user):
     emoji = "✅" if event_type == "joined" else "🚫"
     title = "**Bot Gruba Eklendi**" if event_type == "joined" else "**Bot Gruptan Çıkarıldı**"
-    action_by = user.mention if user else "Bilinmeyen"
+    action_by = user.mention if user and hasattr(user, "mention") else "Bilinmeyen"
     members_count = await app.get_chat_members_count(chat.id)
 
     message = (
@@ -23,13 +24,41 @@ async def create_log_message(event_type: str, chat, user):
 
     return message
 
+
 # ✅ Bot gruba eklendiğinde
 @app.on_message(filters.new_chat_members)
 async def bot_added_handler(client: Client, message: Message):
-    bot_user = await app.get_me()
-    for member in message.new_chat_members:
-        if member.id == bot_user.id:
-            log_text = await create_log_message("joined", message.chat, message.from_user)
+    try:
+        bot_user = await app.get_me()
+        for member in message.new_chat_members:
+            if member.id == bot_user.id:
+                log_text = await create_log_message("joined", message.chat, message.from_user)
+                chat_id = message.chat.id
+
+                if message.chat.username:
+                    url = f"https://t.me/{message.chat.username}"
+                else:
+                    url = f"https://t.me/c/{str(chat_id)[4:]}/1"  # Özel grup linki
+
+                buttons = InlineKeyboardMarkup([
+                    [InlineKeyboardButton("📂 Gruba Git", url=url)]
+                ])
+
+                await app.send_message(LOG_GROUP_ID, log_text, reply_markup=buttons)
+                print(f"[LOG] Bot gruba eklendi: {chat_id}")
+                break
+
+    except Exception as e:
+        print(f"[HATA] Bot gruba eklendiğinde log gönderilemedi:\n{e}")
+
+
+# ✅ Bot gruptan çıkarıldığında
+@app.on_message(filters.left_chat_member)
+async def bot_removed_handler(client: Client, message: Message):
+    try:
+        bot_user = await app.get_me()
+        if message.left_chat_member.id == bot_user.id:
+            log_text = await create_log_message("left", message.chat, message.from_user)
             chat_id = message.chat.id
 
             if message.chat.username:
@@ -38,35 +67,11 @@ async def bot_added_handler(client: Client, message: Message):
                 url = f"https://t.me/c/{str(chat_id)[4:]}/1"
 
             buttons = InlineKeyboardMarkup([
-                [InlineKeyboardButton("📂 Gruba Git", url=url)]
+                [InlineKeyboardButton("📁 Grup Bilgisi", url=url)]
             ])
 
-            # ✅ Hata kontrolü ekle
-            try:
-                await app.send_message(LOG_GROUP_ID, log_text, reply_markup=buttons)
-            except Exception as e:
-                print(f"[HATA] Bot gruba eklendi - Log gönderilemedi: {e}")
-            break
-
-# ✅ Bot gruptan çıkarıldığında
-@app.on_message(filters.left_chat_member)
-async def bot_removed_handler(client: Client, message: Message):
-    bot_user = await app.get_me()
-    if message.left_chat_member.id == bot_user.id:
-        log_text = await create_log_message("left", message.chat, message.from_user)
-        chat_id = message.chat.id
-
-        if message.chat.username:
-            url = f"https://t.me/{message.chat.username}"
-        else:
-            url = f"https://t.me/c/{str(chat_id)[4:]}/1"
-
-        buttons = InlineKeyboardMarkup([
-            [InlineKeyboardButton("📁 Grup Bilgisi", url=url)]
-        ])
-
-        # ✅ Hata kontrolü ekle
-        try:
             await app.send_message(LOG_GROUP_ID, log_text, reply_markup=buttons)
-        except Exception as e:
-            print(f"[HATA] Bot gruptan çıkarıldı - Log gönderilemedi: {e}")
+            print(f"[LOG] Bot gruptan çıkarıldı: {chat_id}")
+
+    except Exception as e:
+        print(f"[HATA] Bot gruptan çıkarıldığında log gönderilemedi:\n{e}")
