@@ -6,10 +6,8 @@ from pyrogram.types import Message
 from config import BANNED_USERS
 from ArchMusic import app
 
-# Grup bazlı iptal edilen kullanıcılar
 cancel_users = defaultdict(set)
 
-# Güzel sözler listesi
 SOZ_LISTESI = [
     "Hayal gücü bilgiden daha önemlidir. – Albert Einstein",
     "İmkansız, sadece tembellerin bahanesidir.",
@@ -33,13 +31,11 @@ SOZ_LISTESI = [
     "Fark yaratmak cesaret ister."
 ]
 
-# /cancel komutu
 @app.on_message(filters.command("cancel") & filters.group & ~BANNED_USERS)
 async def cancel_soz(client, message: Message):
     cancel_users[message.chat.id].add(message.from_user.id)
     await message.reply("❌ Etiketleme işlemi iptal edildi.")
 
-# /soz komutu
 @app.on_message(filters.command("soz") & filters.group & ~BANNED_USERS)
 async def soz_etiketle(client, message: Message):
     user_id = message.from_user.id
