@@ -1,18 +1,47 @@
+import datetime
 from pyrogram import Client, filters
-from pyrogram.types import Message, ChatMemberUpdated, InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram.types import Message, ChatMemberUpdated, InlineKeyboardMarkup, InlineKeyboardButton, InputMediaPhoto
 from pyrogram.enums import ChatMemberStatus
 from config import LOG_GROUP_ID
 from ArchMusic import app
 
 
-async def send_log(text: str, reply_markup=None):
+def get_timestamp():
+    now = datetime.datetime.now()
+    return now.strftime("%Y-%m-%d %H:%M:%S")
+
+
+async def send_log(text: str, user_id=None, has_photo=True, reply_markup=None):
     try:
-        await app.send_message(chat_id=LOG_GROUP_ID, text=text, reply_markup=reply_markup)
+        # Logu dosyaya yaz
+        with open("logs.txt", "a", encoding="utf-8") as f:
+            f.write(f"[{get_timestamp()}]\n{text}\n\n")
+
+        # Profil fotoğrafını ekle (varsa)
+        if user_id and has_photo:
+            try:
+                photos = await app.get_profile_photos(user_id)
+                if photos.total_count > 0:
+                    await app.send_photo(
+                        chat_id=LOG_GROUP_ID,
+                        photo=photos[0].file_id,
+                        caption=f"{text}\n\n🕒 `{get_timestamp()}`",
+                        reply_markup=reply_markup
+                    )
+                    return
+            except Exception as e:
+                print(f"[HATA] Profil fotoğrafı alınamadı: {e}")
+
+        # Fotoğraf yoksa düz mesaj
+        await app.send_message(
+            chat_id=LOG_GROUP_ID,
+            text=f"{text}\n\n🕒 `{get_timestamp()}`",
+            reply_markup=reply_markup
+        )
     except Exception as e:
         print(f"[HATA] Log mesajı gönderilemedi:\n{e}")
 
 
-# ✅ Yeni kullanıcı veya bot eklendiğinde
 @app.on_message(filters.new_chat_members)
 async def on_new_member(client: Client, message: Message):
     bot_id = (await client.get_me()).id
@@ -29,6 +58,7 @@ async def on_new_member(client: Client, message: Message):
                 f"🔗 <b>Link:</b> {chat_link}\n"
                 f"➕ <b>Ekleyen:</b> {ad}"
             )
+            await send_log(text, user_id=message.from_user.id)
         else:
             text = (
                 f"<u>#👤 <b>Kullanıcı Eklendi</b></u>\n\n"
@@ -37,15 +67,12 @@ async def on_new_member(client: Client, message: Message):
                 f"👥 <b>Grup:</b> {chat.title}\n"
                 f"➕ <b>Ekleyen:</b> {ad}"
             )
-
-        markup = InlineKeyboardMarkup(
-            [[InlineKeyboardButton(ad, user_id=message.from_user.id)]] if message.from_user else []
-        )
-
-        await send_log(text, markup)
+            markup = InlineKeyboardMarkup(
+                [[InlineKeyboardButton(ad, user_id=message.from_user.id)]] if message.from_user else []
+            )
+            await send_log(text, user_id=user.id, reply_markup=markup)
 
 
-# ✅ Kullanıcı veya bot ayrıldığında
 @app.on_message(filters.left_chat_member)
 async def on_left_member(client: Client, message: Message):
     bot_id = (await client.get_me()).id
@@ -60,6 +87,7 @@ async def on_left_member(client: Client, message: Message):
             f"🆔 <b>Grup ID:</b> `{chat.id}`\n"
             f"❌ <b>Atan:</b> {ad}"
         )
+        await send_log(text, user_id=message.from_user.id)
     else:
         text = (
             f"<u>#🚷 <b>Kullanıcı Ayrıldı/Atıldı</b></u>\n\n"
@@ -68,15 +96,12 @@ async def on_left_member(client: Client, message: Message):
             f"👥 <b>Grup:</b> {chat.title}\n"
             f"❌ <b>Çıkaran:</b> {ad}"
         )
-
-    markup = InlineKeyboardMarkup(
-        [[InlineKeyboardButton(ad, user_id=message.from_user.id)]] if message.from_user else []
-    )
-
-    await send_log(text, markup)
+        markup = InlineKeyboardMarkup(
+            [[InlineKeyboardButton(ad, user_id=message.from_user.id)]] if message.from_user else []
+        )
+        await send_log(text, user_id=user.id, reply_markup=markup)
 
 
-# ✅ Yetki değişiklikleri, ban/ban kaldırma
 @app.on_chat_member_updated
 async def on_chat_member_update(client: Client, update: ChatMemberUpdated):
     old = update.old_chat_member
@@ -85,12 +110,9 @@ async def on_chat_member_update(client: Client, update: ChatMemberUpdated):
     chat = update.chat
 
     if not user:
-        return  # Güvenlik: kullanıcı boş gelirse işlem yapma
+        return
 
-    try:
-        user_name = user.mention or f"{user.first_name} (`{user.id}`)"
-    except:
-        user_name = f"ID: `{user.id}`"
+    user_name = user.mention or f"{user.first_name} (`{user.id}`)"
 
     if old.status != new.status:
         if new.status == ChatMemberStatus.ADMINISTRATOR:
@@ -136,4 +158,4 @@ async def on_chat_member_update(client: Client, update: ChatMemberUpdated):
         else:
             return
 
-        await send_log(text)
+        await send_log(text, user_id=user.id)
