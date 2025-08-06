@@ -1,193 +1,217 @@
+# Copyright (C) 2024 by TheTeamVivek@Github, < https://github.com/TheTeamVivek >.
+#
+# This file is part of < https://github.com/TheTeamVivek/YukkiMusic > project,
+# and is released under the MIT License.
+# Please see < https://github.com/TheTeamVivek/YukkiMusic/blob/master/LICENSE >
+#
+# All rights reserved.
+#
 
 import math
 from pyrogram.types import InlineKeyboardButton
 from ArchMusic.utils.formatters import time_to_seconds
 
 
-def get_colored_progress_bar(percentage: float, length: int = 15) -> str:
-    filled_length = int(length * percentage // 100)
-    bar = "🟩" * filled_length + "⬜" * (length - filled_length)
-    return f"{bar} {percentage:.0f}%"
+def get_progress_bar(percentage):
+    umm = math.floor(percentage)
+
+    if 0 < umm <= 10:
+        return "🟥⬜⬜⬜⬜⬜⬜⬜⬜"
+    elif 10 < umm <= 20:
+        return "🟥🟥⬜⬜⬜⬜⬜⬜⬜"
+    elif 20 < umm <= 30:
+        return "🟥🟥🟧⬜⬜⬜⬜⬜⬜"
+    elif 30 < umm <= 40:
+        return "🟥🟥🟧🟨⬜⬜⬜⬜⬜"
+    elif 40 < umm <= 50:
+        return "🟥🟥🟧🟨🟩⬜⬜⬜⬜"
+    elif 50 < umm <= 60:
+        return "🟥🟥🟧🟨🟩🟦⬜⬜⬜"
+    elif 60 < umm <= 70:
+        return "🟥🟥🟧🟨🟩🟦🟪⬜⬜"
+    elif 70 < umm <= 80:
+        return "🟥🟥🟧🟨🟩🟦🟪⚫⬜"
+    elif 80 < umm <= 90:
+        return "🟥🟥🟧🟨🟩🟦🟪⚫🟫"
+    elif 90 < umm <= 100:
+        return "🟥🟥🟧🟨🟩🟦🟪⚫🟫⬛"
+    else:
+        return "⬜⬜⬜⬜⬜⬜⬜⬜⬜"
 
 
-def make_callback(action: str, chat_id: int) -> str:
-    return f"ADMIN {action}|{chat_id}"
-
-
-def colorful_stream_controls(chat_id: int):
-    buttons_config = [
-        {"text": "🟢 Başlat ▶️", "action": "Resume"},
-        {"text": "⏸️ Duraklat ⏸", "action": "Pause"},
-        {"text": "⏭️ Atla ⏩", "action": "Skip"},
-        {"text": "🔴 Bitir ⏹️", "action": "Stop"},
-    ]
-    return [
-        [InlineKeyboardButton(text=btn["text"], callback_data=make_callback(btn["action"], chat_id))]
-        for btn in buttons_config
-    ]
-
-
-def colorful_stream_markup_timer(_, videoid, chat_id, played, dur):
+def stream_markup_timer(_, videoid, chat_id, played, dur):
     played_sec = time_to_seconds(played)
     duration_sec = time_to_seconds(dur)
-    percentage = (played_sec / duration_sec) * 100 if duration_sec else 0
+    percentage = (played_sec / duration_sec) * 100
 
-    progress_bar = get_colored_progress_bar(percentage)
+    bar = get_progress_bar(percentage)
 
     buttons = [
         [
             InlineKeyboardButton(
-                text=f"⏳ {played} {progress_bar} {dur}",
-                callback_data="GetTimer"
+                text=f"{played} {bar} {dur}",
+                callback_data="GetTimer",
             )
         ],
         [
-            InlineKeyboardButton(
-                text="🔁 Döngüye Al 🔂",
-                callback_data=make_callback("Loop", chat_id)
-            ),
+            InlineKeyboardButton(text="🏃‍♂️ Sürekli Oynat", callback_data=f"ADMIN Loop|{chat_id}"),
         ],
-        [
-            InlineKeyboardButton(text="⏪ -10s ⏮️", callback_data=make_callback("JumpBack10", chat_id)),
-            InlineKeyboardButton(text="⏩ +10s ⏭️", callback_data=make_callback("JumpForward10", chat_id)),
-            InlineKeyboardButton(text="⏪ -30s ⏮️", callback_data=make_callback("JumpBack30", chat_id)),
-            InlineKeyboardButton(text="⏩ +30s ⏭️", callback_data=make_callback("JumpForward30", chat_id)),
+        [  # ⏮⏭ Jump Back / Forward
+            InlineKeyboardButton(text="⏪ -10s", callback_data=f"ADMIN 1|{chat_id}"),
+            InlineKeyboardButton(text="⏩ +10s", callback_data=f"ADMIN 2|{chat_id}"),
+            InlineKeyboardButton(text="⏪ -30s", callback_data=f"ADMIN 3|{chat_id}"),
+            InlineKeyboardButton(text="⏩ +30s", callback_data=f"ADMIN 4|{chat_id}"),
         ],
-    ] + colorful_stream_controls(chat_id) + [
-        [
-            InlineKeyboardButton(text="❌ Kapat ✖️", callback_data="close"),
+        [  # ▶️⏸️⏭️⏹️ Controls (gamer-style)
+            InlineKeyboardButton(text="▶️ Başla", callback_data=f"ADMIN Resume|{chat_id}"),
+            InlineKeyboardButton(text="⏸ Duraklat", callback_data=f"ADMIN Pause|{chat_id}"),
+            InlineKeyboardButton(text="⏭ Atlama", callback_data=f"ADMIN Skip|{chat_id}"),
+            InlineKeyboardButton(text="🟥 Bitir", callback_data=f"ADMIN Stop|{chat_id}"),
+        ],
+        [  # ❌ Close
+            InlineKeyboardButton(text="❌ Menüyü Kapat", callback_data="close")
         ],
     ]
     return buttons
 
 
-def colorful_stream_markup(_, videoid, chat_id):
+def stream_markup(_, videoid, chat_id):
     buttons = [
-        [
-            InlineKeyboardButton(
-                text="🔁 Döngüye Al 🔂",
-                callback_data=make_callback("Loop", chat_id)
-            ),
+    [
+            InlineKeyboardButton(text="🏃‍♂️ Sürekli Oynat", callback_data=f"ADMIN Loop|{chat_id}"),
         ],
-        [
-            InlineKeyboardButton(text="⏪ -10s ⏮️", callback_data=make_callback("JumpBack10", chat_id)),
-            InlineKeyboardButton(text="⏩ +10s ⏭️", callback_data=make_callback("JumpForward10", chat_id)),
-            InlineKeyboardButton(text="⏪ -30s ⏮️", callback_data=make_callback("JumpBack30", chat_id)),
-            InlineKeyboardButton(text="⏩ +30s ⏭️", callback_data=make_callback("JumpForward30", chat_id)),
+        [  # ⏮⏭ Jump Back / Forward
+            InlineKeyboardButton(text="⏪ -10s", callback_data=f"ADMIN 1|{chat_id}"),
+            InlineKeyboardButton(text="⏩ +10s", callback_data=f"ADMIN 2|{chat_id}"),
+            InlineKeyboardButton(text="⏪ -30s", callback_data=f"ADMIN 3|{chat_id}"),
+            InlineKeyboardButton(text="⏩ +30s", callback_data=f"ADMIN 4|{chat_id}"),
         ],
-    ] + colorful_stream_controls(chat_id) + [
-        [
-            InlineKeyboardButton(text="❌ Kapat ✖️", callback_data="close"),
+        [  # ▶️⏸️⏭️⏹️ Controls (gamer-style)
+            InlineKeyboardButton(text="▶️ Başla", callback_data=f"ADMIN Resume|{chat_id}"),
+            InlineKeyboardButton(text="⏸ Duraklat", callback_data=f"ADMIN Pause|{chat_id}"),
+            InlineKeyboardButton(text="⏭ Atlama", callback_data=f"ADMIN Skip|{chat_id}"),
+            InlineKeyboardButton(text="🟥 Bitir", callback_data=f"ADMIN Stop|{chat_id}"),
+        ],
+        [  # ❌ Close
+            InlineKeyboardButton(text="❌ Menüyü Kapat", callback_data="close")
         ],
     ]
     return buttons
 
+        
 
-def colorful_telegram_markup_timer(_, chat_id, played, dur):
+
+def telegram_markup_timer(_, chat_id, played, dur):
     played_sec = time_to_seconds(played)
     duration_sec = time_to_seconds(dur)
-    percentage = (played_sec / duration_sec) * 100 if duration_sec else 0
+    percentage = (played_sec / duration_sec) * 100
 
-    progress_bar = get_colored_progress_bar(percentage)
+    bar = get_progress_bar(percentage)  # using for getting the bar
 
     buttons = [
         [
             InlineKeyboardButton(
-                text=f"⏳ {played} {progress_bar} {dur}",
+                text=f"{played} {bar} {dur}",
                 callback_data="GetTimer",
             )
         ],
         [
             InlineKeyboardButton(
-                text="📋 Panel 🛠️",
+                text=_["PL_B_3"],
                 callback_data=f"PanelMarkup None|{chat_id}",
             ),
         ],
         [
-            InlineKeyboardButton(text="▶️ Başlat ▶️", callback_data=make_callback("Resume", chat_id)),
-            InlineKeyboardButton(text="⏸️ Duraklat ⏸️", callback_data=make_callback("Pause", chat_id)),
-            InlineKeyboardButton(text="⏭️ Atla ⏩", callback_data=make_callback("Skip", chat_id)),
-            InlineKeyboardButton(text="⏹️ Durdur ⏹️", callback_data=make_callback("Stop", chat_id)),
+            InlineKeyboardButton(text="▷", callback_data=f"ADMIN Resume|{chat_id}"),
+            InlineKeyboardButton(text="II", callback_data=f"ADMIN Pause|{chat_id}"),
+            InlineKeyboardButton(text="‣‣I", callback_data=f"ADMIN Skip|{chat_id}"),
+            InlineKeyboardButton(text="▢", callback_data=f"ADMIN Stop|{chat_id}"),
         ],
         [
-            InlineKeyboardButton(text="❌ Kapat ✖️", callback_data="close"),
+            InlineKeyboardButton(text=_["CLOSEMENU_BUTTON"], callback_data="close"),
         ],
     ]
     return buttons
 
 
-def colorful_telegram_markup(_, chat_id):
+def telegram_markup(_, chat_id):
     buttons = [
         [
             InlineKeyboardButton(
-                text="📋 Panel 🛠️",
+                text=_["PL_B_3"],
                 callback_data=f"PanelMarkup None|{chat_id}",
             ),
         ],
         [
-            InlineKeyboardButton(text="▶️ Başlat ▶️", callback_data=make_callback("Resume", chat_id)),
-            InlineKeyboardButton(text="⏸️ Duraklat ⏸️", callback_data=make_callback("Pause", chat_id)),
-            InlineKeyboardButton(text="⏭️ Atla ⏩", callback_data=make_callback("Skip", chat_id)),
-            InlineKeyboardButton(text="⏹️ Durdur ⏹️", callback_data=make_callback("Stop", chat_id)),
+            InlineKeyboardButton(text="▷", callback_data=f"ADMIN Resume|{chat_id}"),
+            InlineKeyboardButton(text="II", callback_data=f"ADMIN Pause|{chat_id}"),
+            InlineKeyboardButton(text="‣‣I", callback_data=f"ADMIN Skip|{chat_id}"),
+            InlineKeyboardButton(text="▢", callback_data=f"ADMIN Stop|{chat_id}"),
         ],
         [
-            InlineKeyboardButton(text="❌ Kapat ✖️", callback_data="close"),
+            InlineKeyboardButton(text=_["CLOSEMENU_BUTTON"], callback_data="close"),
         ],
     ]
     return buttons
 
 
-def colorful_track_markup(_, videoid, user_id, channel, fplay):
+## Search Query Inline
+
+
+def track_markup(_, videoid, user_id, channel, fplay):
     buttons = [
         [
             InlineKeyboardButton(
-                text="🎵 Sesli Oynat 🔊",
+                text=_["P_B_1"],
                 callback_data=f"MusicStream {videoid}|{user_id}|a|{channel}|{fplay}",
             ),
             InlineKeyboardButton(
-                text="📹 Video Oynat 🎥",
+                text=_["P_B_2"],
                 callback_data=f"MusicStream {videoid}|{user_id}|v|{channel}|{fplay}",
             ),
         ],
         [
             InlineKeyboardButton(
-                text="❌ Kapat ✖️", callback_data=f"forceclose {videoid}|{user_id}"
+                text=_["CLOSE_BUTTON"], callback_data=f"forceclose {videoid}|{user_id}"
             )
         ],
     ]
     return buttons
 
 
-def colorful_playlist_markup(_, videoid, user_id, ptype, channel, fplay):
+def playlist_markup(_, videoid, user_id, ptype, channel, fplay):
     buttons = [
         [
             InlineKeyboardButton(
-                text="🎵 Sesli Oynat 🔊",
+                text=_["P_B_1"],
                 callback_data=f"YukkiPlaylists {videoid}|{user_id}|{ptype}|a|{channel}|{fplay}",
             ),
             InlineKeyboardButton(
-                text="📹 Video Oynat 🎥",
+                text=_["P_B_2"],
                 callback_data=f"YukkiPlaylists {videoid}|{user_id}|{ptype}|v|{channel}|{fplay}",
             ),
         ],
         [
             InlineKeyboardButton(
-                text="❌ Kapat ✖️", callback_data=f"forceclose {videoid}|{user_id}"
+                text=_["CLOSE_BUTTON"], callback_data=f"forceclose {videoid}|{user_id}"
             ),
         ],
     ]
     return buttons
 
 
-def colorful_livestream_markup(_, videoid, user_id, mode, channel, fplay):
+## Live Stream Markup
+
+
+def livestream_markup(_, videoid, user_id, mode, channel, fplay):
     buttons = [
         [
             InlineKeyboardButton(
-                text="📡 Canlı Yayın 🔴",
+                text=_["P_B_3"],
                 callback_data=f"LiveStream {videoid}|{user_id}|{mode}|{channel}|{fplay}",
             ),
             InlineKeyboardButton(
-                text="❌ Kapat ✖️",
+                text=_["CLOSEMENU_BUTTON"],
                 callback_data=f"forceclose {videoid}|{user_id}",
             ),
         ],
@@ -195,29 +219,32 @@ def colorful_livestream_markup(_, videoid, user_id, mode, channel, fplay):
     return buttons
 
 
-def colorful_slider_markup(_, videoid, user_id, query, query_type, channel, fplay):
+## Slider Query Markup
+
+
+def slider_markup(_, videoid, user_id, query, query_type, channel, fplay):
     query = f"{query[:20]}"
     buttons = [
         [
             InlineKeyboardButton(
-                text="🎵 Sesli Oynat 🔊",
+                text=_["P_B_1"],
                 callback_data=f"MusicStream {videoid}|{user_id}|a|{channel}|{fplay}",
             ),
             InlineKeyboardButton(
-                text="📹 Video Oynat 🎥",
+                text=_["P_B_2"],
                 callback_data=f"MusicStream {videoid}|{user_id}|v|{channel}|{fplay}",
             ),
         ],
         [
             InlineKeyboardButton(
-                text="❮ Önceki",
+                text="❮",
                 callback_data=f"slider B|{query_type}|{query}|{user_id}|{channel}|{fplay}",
             ),
             InlineKeyboardButton(
-                text="❌ Kapat ✖️", callback_data=f"forceclose {query}|{user_id}"
+                text=_["CLOSE_BUTTON"], callback_data=f"forceclose {query}|{user_id}"
             ),
             InlineKeyboardButton(
-                text="Sonraki ❯",
+                text="❯",
                 callback_data=f"slider F|{query_type}|{query}|{user_id}|{channel}|{fplay}",
             ),
         ],
@@ -225,61 +252,113 @@ def colorful_slider_markup(_, videoid, user_id, query, query_type, channel, fpla
     return buttons
 
 
-def colorful_panel_markup_1(_, videoid, chat_id):
+def panel_markup_1(_, videoid, chat_id):
     buttons = [
         [
-            InlineKeyboardButton(text="⏸️ Duraklat ⏸️", callback_data=make_callback("Pause", chat_id)),
-            InlineKeyboardButton(text="▶️ Devam Et ▶️", callback_data=make_callback("Resume", chat_id)),
+            InlineKeyboardButton(
+                text="⏸ Pause", callback_data=f"ADMIN Pause|{chat_id}"
+            ),
+            InlineKeyboardButton(
+                text="▶️ Resume",
+                callback_data=f"ADMIN Resume|{chat_id}",
+            ),
         ],
         [
-            InlineKeyboardButton(text="⏭️ Atla ⏩", callback_data=make_callback("Skip", chat_id)),
-            InlineKeyboardButton(text="⏹️ Durdur ⏹️", callback_data=make_callback("Stop", chat_id)),
+            InlineKeyboardButton(text="⏯ Skip", callback_data=f"ADMIN Skip|{chat_id}"),
+            InlineKeyboardButton(text="⏹ Stop", callback_data=f"ADMIN Stop|{chat_id}"),
         ],
         [
-            InlineKeyboardButton(text="🔁 Tekrarla 🔂", callback_data=make_callback("Replay", chat_id)),
+            InlineKeyboardButton(
+                text="🔁 Replay ", callback_data=f"ADMIN Replay|{chat_id}"
+            ),
         ],
         [
-            InlineKeyboardButton(text="◀️ Geri", callback_data=f"Pages Back|0|{videoid}|{chat_id}"),
-            InlineKeyboardButton(text="🔙 Ana Menü", callback_data=f"MainMarkup {videoid}|{chat_id}"),
-            InlineKeyboardButton(text="▶️ İleri", callback_data=f"Pages Forw|0|{videoid}|{chat_id}"),
+            InlineKeyboardButton(
+                text="◀️",
+                callback_data=f"Pages Back|0|{videoid}|{chat_id}",
+            ),
+            InlineKeyboardButton(
+                text="🔙 Back",
+                callback_data=f"MainMarkup {videoid}|{chat_id}",
+            ),
+            InlineKeyboardButton(
+                text="▶️",
+                callback_data=f"Pages Forw|0|{videoid}|{chat_id}",
+            ),
         ],
     ]
     return buttons
 
 
-def colorful_panel_markup_2(_, videoid, chat_id):
+def panel_markup_2(_, videoid, chat_id):
     buttons = [
         [
-            InlineKeyboardButton(text="🔇 Sessiz 🔕", callback_data=make_callback("Mute", chat_id)),
-            InlineKeyboardButton(text="🔊 Ses Aç 🔉", callback_data=make_callback("Unmute", chat_id)),
+            InlineKeyboardButton(text="🔇 Mute", callback_data=f"ADMIN Mute|{chat_id}"),
+            InlineKeyboardButton(
+                text="🔊 Unmute",
+                callback_data=f"ADMIN Unmute|{chat_id}",
+            ),
         ],
         [
-            InlineKeyboardButton(text="🔀 Karıştır 🔄", callback_data=make_callback("Shuffle", chat_id)),
-            InlineKeyboardButton(text="🔁 Döngüye Al 🔂", callback_data=make_callback("Loop", chat_id)),
+            InlineKeyboardButton(
+                text="🔀 Shuffle",
+                callback_data=f"ADMIN Shuffle|{chat_id}",
+            ),
+            InlineKeyboardButton(text="🔁 Loop", callback_data=f"ADMIN Loop|{chat_id}"),
         ],
         [
-            InlineKeyboardButton(text="◀️ Geri", callback_data=f"Pages Back|1|{videoid}|{chat_id}"),
-            InlineKeyboardButton(text="🔙 Ana Menü", callback_data=f"MainMarkup {videoid}|{chat_id}"),
-            InlineKeyboardButton(text="▶️ İleri", callback_data=f"Pages Forw|1|{videoid}|{chat_id}"),
+            InlineKeyboardButton(
+                text="◀️",
+                callback_data=f"Pages Back|1|{videoid}|{chat_id}",
+            ),
+            InlineKeyboardButton(
+                text="🔙 Back",
+                callback_data=f"MainMarkup {videoid}|{chat_id}",
+            ),
+            InlineKeyboardButton(
+                text="▶️",
+                callback_data=f"Pages Forw|1|{videoid}|{chat_id}",
+            ),
         ],
     ]
     return buttons
 
 
-def colorful_panel_markup_3(_, videoid, chat_id):
+def panel_markup_3(_, videoid, chat_id):
     buttons = [
         [
-            InlineKeyboardButton(text="⏮️ 10 Saniye Geri ⏪", callback_data=make_callback("JumpBack10", chat_id)),
-            InlineKeyboardButton(text="⏭️ 10 Saniye İleri ⏩", callback_data=make_callback("JumpForward10", chat_id)),
+            InlineKeyboardButton(
+                text="⏮ 10 seconds",
+                callback_data=f"ADMIN 1|{chat_id}",
+            ),
+            InlineKeyboardButton(
+                text="⏭ 10 seconds",
+                callback_data=f"ADMIN 2|{chat_id}",
+            ),
         ],
         [
-            InlineKeyboardButton(text="⏮️ 30 Saniye Geri ⏪", callback_data=make_callback("JumpBack30", chat_id)),
-            InlineKeyboardButton(text="⏭️ 30 Saniye İleri ⏩", callback_data=make_callback("JumpForward30", chat_id)),
+            InlineKeyboardButton(
+                text="⏮ 30 seconds",
+                callback_data=f"ADMIN 3|{chat_id}",
+            ),
+            InlineKeyboardButton(
+                text="⏭ 30 seconds",
+                callback_data=f"ADMIN 4|{chat_id}",
+            ),
         ],
         [
-            InlineKeyboardButton(text="◀️ Geri", callback_data=f"Pages Back|2|{videoid}|{chat_id}"),
-            InlineKeyboardButton(text="🔙 Ana Menü", callback_data=f"MainMarkup {videoid}|{chat_id}"),
-            InlineKeyboardButton(text="▶️ İleri", callback_data=f"Pages Forw|2|{videoid}|{chat_id}"),
+            InlineKeyboardButton(
+                text="◀️",
+                callback_data=f"Pages Back|2|{videoid}|{chat_id}",
+            ),
+            InlineKeyboardButton(
+                text="🔙 Back",
+                callback_data=f"MainMarkup {videoid}|{chat_id}",
+            ),
+            InlineKeyboardButton(
+                text="▶️",
+                callback_data=f"Pages Forw|2|{videoid}|{chat_id}",
+            ),
         ],
     ]
     return buttons
