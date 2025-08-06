@@ -45,17 +45,22 @@ HELP_2 = """ <u>**Eğlence komutları:**</u>
 
 
 
-HELP_3 = """💥<u>**DEGİSTİRME KOMUTLARI:**</u>
+HELP_3 = """<b>💥━━━━━━━━━━━━━━━━━💥</b>
+<b>     🎵 DEGİSTİRME KOMUTLARI 🎵</b>
+<b>💥━━━━━━━━━━━━━━━━━💥</b>
 
-⏸️ /duraklat: Müziği duraklatır.
-⏯️ /devam: Müziği devam ettirir.
-⏩ /atla: Çalan müziği atlar.
-⏹️ /dur: Müziği durdurur.
-🔀 /karistir: Parçaları karıştırır.
-📑 /sira: Sıradaki müzikleri gösterir
-⏭️ /ilerisar: Müziği ileri sarar (Ör: /ilerisar 15).
-⏮️ /gerisar: Müziği geri sarar (Ör: /gerisar 15).
-🔁 /dongu: Müziği döngüye alır (Ör: /dongu 3).
+<b>⏸️ /duraklat</b> — <i>Müziği duraklatır</i>  
+<b>▶️ /devam</b> — <i>Müziği devam ettirir</i>  
+<b>⏩ /atla</b> — <i>Çalan müziği atlar</i>  
+<b>⏹️ /dur</b> — <i>Müziği durdurur</i>  
+<b>🔀 /karistir</b> — <i>Parçaları karıştırır</i>  
+<b>📑 /sira</b> — <i>Sıradaki müzikleri gösterir</i>  
+<b>⏭️ /ilerisar X</b> — <i>Müziği X sn ileri sarar</i>  
+<b>⏮️ /gerisar X</b> — <i>Müziği X sn geri sarar</i>  
+<b>🔁 /dongu X</b> — <i>Müziği X kez döngüye alır</i>  
+
+<i>💡 Örnek: /ilerisar 15 → 15 saniye ileri</i>
+
  
 
 """
