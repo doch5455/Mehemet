@@ -2,6 +2,9 @@ import platform
 from datetime import datetime, timedelta
 import psutil
 from ArchMusic import app
+from config import LOG, LOG_GROUP_ID
+import psutil
+l
 from ArchMusic.utils.database import is_on_off
 from ArchMusic.utils.database.memorydatabase import (
     get_active_chats, get_active_video_chats)
