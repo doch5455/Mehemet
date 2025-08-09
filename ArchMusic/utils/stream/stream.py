@@ -12,7 +12,7 @@ import os
 from random import randint
 from typing import Union
 
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram.types import InlineKeyboardMarkup
 
 import config
 from ArchMusic import Carbon, YouTube, app
@@ -29,16 +29,6 @@ from ArchMusic.utils.inline.playlist import close_markup
 from ArchMusic.utils.pastebin import ArchMusicbin
 from ArchMusic.utils.stream.queue import put_queue, put_queue_index
 
-
-def gelişmiş_stream_markup(_, vidid, chat_id):
-    buttons = [
-        [InlineKeyboardButton("⏸️ Duraklat", callback_data=f"pause_{chat_id}")],
-        [InlineKeyboardButton("▶️ Devam Et", callback_data=f"resume_{chat_id}")],
-        [InlineKeyboardButton("⏭️ Atla", callback_data=f"skip_{chat_id}")],
-    ]
-    if vidid:
-        buttons.append([InlineKeyboardButton("ℹ️ Bilgi", url=f"https://t.me/{app.username}?start=info_{vidid}")])
-    return InlineKeyboardMarkup(buttons)
 
 
 async def stream(
@@ -125,17 +115,15 @@ async def stream(
                     forceplay=forceplay,
                 )
                 img = None
-                button = gelişmiş_stream_markup(_, vidid, chat_id)
+                button = stream_markup(_, vidid, chat_id)
                 run = await app.send_message(
-                    original_chat_id,
-                    text=(
-                        f"🎶 **{title}**\n"
-                        f"⏳ Süre: `{duration_min}` dakika\n"
-                        f"👤 Kullanıcı: _{user_name}_\n\n"
-                        f"[🎵 Parçayı Telegram'da Aç](https://t.me/{app.username}?start=info_{vidid})"
-                    ),
-                    parse_mode="markdown",
-                    reply_markup=button,
+                original_chat_id,
+                text=_["stream_1"].format(
+                    title,
+                    f"https://t.me/{app.username}?start=info_{vidid}",
+                    duration_min,
+                    user_name
+                ),
                 )
                 db[chat_id][0]["mystic"] = run
                 db[chat_id][0]["markup"] = "stream"
@@ -207,17 +195,15 @@ async def stream(
                 forceplay=forceplay,
             )
             img = None
-            button = gelişmiş_stream_markup(_, vidid, chat_id)
+            button = stream_markup(_, vidid, chat_id)
             run = await app.send_message(
                 original_chat_id,
-                text=(
-                    f"🎶 **{title}**\n"
-                    f"⏳ Süre: `{duration_min}` dakika\n"
-                    f"👤 Kullanıcı: _{user_name}_\n\n"
-                    f"[🎵 Parçayı Telegram'da Aç](https://t.me/{app.username}?start=info_{vidid})"
+                text=_["stream_1"].format(
+                    title,
+                    f"https://t.me/{app.username}?start=info_{vidid}",
+                    duration_min,
+                    user_name
                 ),
-                parse_mode="markdown",
-                reply_markup=button,
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "stream"
@@ -268,7 +254,6 @@ async def stream(
                 text=_["stream_3"].format(
                     title, duration_min, user_name
                 ),
-                reply_markup=button,
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "tg"
@@ -323,7 +308,6 @@ async def stream(
                 text=_["stream_4"].format(
                     title, link, duration_min, user_name
                 ),
-                reply_markup=button,
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "tg"
@@ -374,20 +358,19 @@ async def stream(
                 forceplay=forceplay,
             )
             img = None
-            button = gelişmiş_stream_markup(_, vidid, chat_id)
+            button = telegram_markup(_, chat_id)
             run = await app.send_message(
                 original_chat_id,
-                text=(
-                    f"🎶 **{title}**\n"
-                    f"⏳ Süre: `{duration_min}`\n"
-                    f"👤 Kullanıcı: _{user_name}_\n\n"
-                    f"[🎵 Parçayı Telegram'da Aç](https://t.me/{app.username}?start=info_{vidid})"
+                text=_["stream_1"].format(
+                    title,
+                    f"https://t.me/{app.username}?start=info_{vidid}",
+                    duration_min,
+                    user_name
                 ),
-                parse_mode="markdown",
-                reply_markup=button,
+                
             )
             db[chat_id][0]["mystic"] = run
-            db[chat_id][0]["markup"] = "stream"
+            db[chat_id][0]["markup"] = "tg"
     elif streamtype == "index":
         link = result
         title = "Index or M3u8 Link"
@@ -438,10 +421,9 @@ async def stream(
                     duration_min,
                     user_name
                 ),
-                reply_markup=button,
+                
             )
+                
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "tg"
-    else:
-        raise AssistantErr(_["play_6"])
-    await add_active_chat(chat_id)
+            await mystic.delete()
