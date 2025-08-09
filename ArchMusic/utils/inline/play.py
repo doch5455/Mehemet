@@ -1,34 +1,15 @@
-
 import math
 from pyrogram.types import InlineKeyboardButton
 from ArchMusic.utils.formatters import time_to_seconds
 
 
 def get_progress_bar(percentage):
-    umm = math.floor(percentage)
-
-    if 0 < umm <= 10:
-        return "🟥⬜⬜⬜⬜⬜⬜⬜⬜"
-    elif 10 < umm <= 20:
-        return "🟥🟥⬜⬜⬜⬜⬜⬜⬜"
-    elif 20 < umm <= 30:
-        return "🟥🟥🟧⬜⬜⬜⬜⬜⬜"
-    elif 30 < umm <= 40:
-        return "🟥🟥🟧🟨⬜⬜⬜⬜⬜"
-    elif 40 < umm <= 50:
-        return "🟥🟥🟧🟨🟩⬜⬜⬜⬜"
-    elif 50 < umm <= 60:
-        return "🟥🟥🟧🟨🟩🟦⬜⬜⬜"
-    elif 60 < umm <= 70:
-        return "🟥🟥🟧🟨🟩🟦🟪⬜⬜"
-    elif 70 < umm <= 80:
-        return "🟥🟥🟧🟨🟩🟦🟪⚫⬜"
-    elif 80 < umm <= 90:
-        return "🟥🟥🟧🟨🟩🟦🟪⚫🟫"
-    elif 90 < umm <= 100:
-        return "🟥🟥🟧🟨🟩🟦🟪⚫🟫⬛"
-    else:
-        return "⬜⬜⬜⬜⬜⬜⬜⬜⬜"
+    umm = math.floor(percentage / 10)
+    colors = ["🟥", "🟧", "🟨", "🟩", "🟦", "🟪"]
+    color = colors[min(umm // 2, len(colors) - 1)]  # Doldukça renk değişiyor
+    filled = color * umm
+    empty = "⬜" * (10 - umm)
+    return filled + empty
 
 
 def stream_markup_timer(_, videoid, chat_id, played, dur):
@@ -69,7 +50,7 @@ def stream_markup_timer(_, videoid, chat_id, played, dur):
 
 def stream_markup(_, videoid, chat_id):
     buttons = [
-    [
+        [
             InlineKeyboardButton(text="🏃‍♂️ Sürekli Oynat", callback_data=f"ADMIN Loop|{chat_id}"),
         ],
         [  # ⏮⏭ Jump Back / Forward
@@ -89,8 +70,6 @@ def stream_markup(_, videoid, chat_id):
         ],
     ]
     return buttons
-
-        
 
 
 def telegram_markup_timer(_, chat_id, played, dur):
