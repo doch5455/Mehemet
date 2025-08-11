@@ -1,12 +1,4 @@
-#
-# Copyright (C) 2021-2023 by ArchBots@Github, < https://github.com/ArchBots >.
-#
-# This file is part of < https://github.com/ArchBots/ArchMusic > project,
-# and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/ArchBots/ArchMusic/blob/master/LICENSE >
-#
-# All rights reserved.
-#
+
 
 import os
 import re
@@ -128,14 +120,17 @@ async def song_helper_cb(client, CallbackQuery, _):
     callback_request = callback_data.split(None, 1)[1]
     stype, vidid = callback_request.split("|")
     try:
-        formats_available, link = await YouTube.formats(
-            vidid, True
-        )
-    except Exception as e:
-        print(e)
-        return await CallbackQuery.edit_message_text(_["song_7"])
-    keyboard = InlineKeyboard()
+        await CallbackQuery.answer(_["song_6"], show_alert=True)
+    except:
+        pass
     if stype == "audio":
+        try:
+            formats_available, link = await YouTube.formats(
+                vidid, True
+            )
+        except:
+            return await CallbackQuery.edit_message_text(_["song_7"])
+        keyboard = InlineKeyboard()
         done = []
         for x in formats_available:
             check = x["format"]
@@ -168,24 +163,27 @@ async def song_helper_cb(client, CallbackQuery, _):
             reply_markup=keyboard
         )
     else:
-        # Video format filtreleme kısmı (esnek hale getirildi)
-        done = [160, 133, 134, 135, 136, 137, 298, 299, 264, 304, 266]
-
-        filtered_formats = []
-        for x in formats_available:
-            if x["filesize"] is None:
-                continue
-            if int(x["format_id"]) in done:
-                filtered_formats.append(x)
+        try:
+            formats_available, link = await YouTube.formats(
+                vidid, True
+            )
+        except Exception as e:
+            print(f"Format fetch error: {e}")
+            return await CallbackQuery.edit_message_text(_["song_7"])
+        keyboard = InlineKeyboard()
+        
+        # done listesi kaldırıldı, tüm filesize olan video formatları kabul ediliyor
+        filtered_formats = [x for x in formats_available if x.get("filesize")]
 
         if not filtered_formats:
-            # Eğer filtrelenmiş format yoksa, tüm formatları göster
-            filtered_formats = [x for x in formats_available if x["filesize"] is not None]
+            return await CallbackQuery.edit_message_text(
+                "Video için kullanılabilir biçimler alınamadı. Lütfen başka bir parça deneyin."
+            )
 
         for x in filtered_formats:
             sz = convert_bytes(x["filesize"])
             check = x["format"]
-            ap = check.split("-")[1] if "-" in check else check
+            ap = check.split("-")[1].strip() if "-" in check else check
             to = f"{ap} = {sz}"
             keyboard.row(
                 InlineKeyboardButton(
