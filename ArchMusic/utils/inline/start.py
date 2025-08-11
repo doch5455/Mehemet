@@ -1,4 +1,3 @@
-
 #
 # Copyright (C) 2021-2023 by ArchBots@Github, < https://github.com/ArchBots >.
 #
@@ -40,20 +39,27 @@ def start_pannel(_):
             ]
         )
     else:
-        if SUPPORT_CHANNEL:
+        # Tekli buton varsa bile 2'li satır yapıyoruz, boş buton ekleyerek.
+        if SUPPORT_CHANNEL and not SUPPORT_GROUP:
             buttons.append(
                 [
                     InlineKeyboardButton(
                         text=_["S_B_4"], url=f"{SUPPORT_CHANNEL}"
-                    )
+                    ),
+                    InlineKeyboardButton(
+                        text=" ", callback_data="ignore"  # boş buton veya yok sayılan
+                    ),
                 ]
             )
-        if SUPPORT_GROUP:
+        elif SUPPORT_GROUP and not SUPPORT_CHANNEL:
             buttons.append(
                 [
                     InlineKeyboardButton(
                         text=_["S_B_3"], url=f"{SUPPORT_GROUP}"
-                    )
+                    ),
+                    InlineKeyboardButton(
+                        text=" ", callback_data="ignore"
+                    ),
                 ]
             )
     return buttons
@@ -64,8 +70,11 @@ def private_panel(_, BOT_USERNAME, OWNER: Union[bool, int] = None):
         [
             InlineKeyboardButton(
                 text=_["S_B_8"], callback_data="settings_back_helper"
-            )
-        ]
+            ),
+            InlineKeyboardButton(
+                text=" ", callback_data="ignore"
+            ),
+        ],
     ]
     if SUPPORT_CHANNEL and SUPPORT_GROUP:
         buttons.append(
@@ -79,50 +88,69 @@ def private_panel(_, BOT_USERNAME, OWNER: Union[bool, int] = None):
             ]
         )
     else:
-        if SUPPORT_CHANNEL:
+        if SUPPORT_CHANNEL and not SUPPORT_GROUP:
             buttons.append(
                 [
                     InlineKeyboardButton(
                         text=_["S_B_4"], url=f"{SUPPORT_CHANNEL}"
-                    )
+                    ),
+                    InlineKeyboardButton(
+                        text=" ", callback_data="ignore"
+                    ),
                 ]
             )
-        if SUPPORT_GROUP:
+        elif SUPPORT_GROUP and not SUPPORT_CHANNEL:
             buttons.append(
                 [
                     InlineKeyboardButton(
                         text=_["S_B_3"], url=f"{SUPPORT_GROUP}"
-                    )
+                    ),
+                    InlineKeyboardButton(
+                        text=" ", callback_data="ignore"
+                    ),
                 ]
             )
+
     buttons.append(
         [
             InlineKeyboardButton(
                 text=_["S_B_5"],
                 url=f"https://t.me/{BOT_USERNAME}?startgroup=true",
-            )
+            ),
+            InlineKeyboardButton(
+                text=" ", callback_data="ignore"
+            ),
         ]
     )
     if GITHUB_REPO and OWNER:
         buttons.append(
             [
                 InlineKeyboardButton(text=_["S_B_7"], user_id=OWNER),
+                InlineKeyboardButton(
+                    text=" ", callback_data="ignore"
+                ),
             ]
         )
     else:
-        if GITHUB_REPO:
+        if GITHUB_REPO and not OWNER:
             buttons.append(
                 [
                     InlineKeyboardButton(
                         text=_["S_B_6"], url=f"https://github.com/ArchBots/ArchMusic"
                     ),
+                    InlineKeyboardButton(
+                        text=" ", callback_data="ignore"
+                    ),
                 ]
             )
-        if OWNER:
+        if OWNER and not GITHUB_REPO:
             buttons.append(
                 [
                     InlineKeyboardButton(
                         text=_["S_B_7"], user_id=OWNER
+                    ),
+                    InlineKeyboardButton(
+                        text=" ", callback_data="ignore"
                     ),
                 ]
             )
