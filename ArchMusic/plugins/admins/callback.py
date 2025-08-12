@@ -1,12 +1,4 @@
-#
-# Copyright (C) 2021-2023 by ArchBots@Github, < https://github.com/ArchBots >.
-#
-# This file is part of < https://github.com/ArchBots/ArchMusic > project,
-# and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/ArchBots/ArchMusic/blob/master/LICENSE >
-#
-# All rights reserved.
-#
+
 
 import random
 
@@ -18,17 +10,17 @@ from ArchMusic import YouTube, app
 from ArchMusic.core.call import ArchMusic
 from ArchMusic.misc import SUDOERS, db
 from ArchMusic.utils.database import (is_active_chat,
-                                       is_music_playing, is_muted,
-                                       is_nonadmin_chat, music_off,
-                                       music_on, mute_off, mute_on,
-                                       set_loop)
+                                     is_music_playing, is_muted,
+                                     is_nonadmin_chat, music_off,
+                                     music_on, mute_off, mute_on,
+                                     set_loop)
 from ArchMusic.utils.decorators.language import languageCB
 from ArchMusic.utils.formatters import seconds_to_min
 from ArchMusic.utils.inline.play import (panel_markup_1,
-                                          panel_markup_2,
-                                          panel_markup_3,
-                                          stream_markup,
-                                          telegram_markup)
+                                        panel_markup_2,
+                                        panel_markup_3,
+                                        stream_markup,
+                                        telegram_markup)
 from ArchMusic.utils.stream.autoclear import auto_clean
 
 
@@ -42,13 +34,13 @@ async def markup_panel(client, CallbackQuery: CallbackQuery, _):
     callback_data = CallbackQuery.data.strip()
     callback_request = callback_data.split(None, 1)[1]
     videoid, chat_id = callback_request.split("|")
-    chat_id = CallbackQuery.message.chat.id
+    chat_id = CallbackQuery.message.chat.id  # Burası zaten chat id, o yüzden callback_request içindeki chat_id kullanmaya gerek yok
     buttons = panel_markup_1(_, videoid, chat_id)
     try:
         await CallbackQuery.edit_message_reply_markup(
             reply_markup=InlineKeyboardMarkup(buttons)
         )
-    except:
+    except Exception:
         return
     if chat_id not in wrong:
         wrong[chat_id] = {}
@@ -57,21 +49,21 @@ async def markup_panel(client, CallbackQuery: CallbackQuery, _):
 
 @app.on_callback_query(filters.regex("MainMarkup") & ~BANNED_USERS)
 @languageCB
-async def del_back_playlist(client, CallbackQuery, _):
+async def del_back_playlist(client, CallbackQuery: CallbackQuery, _):
     await CallbackQuery.answer()
     callback_data = CallbackQuery.data.strip()
     callback_request = callback_data.split(None, 1)[1]
     videoid, chat_id = callback_request.split("|")
     if videoid == str(None):
-        buttons = telegram_markup(_, chat_id)
+        buttons = telegram_markup(_, CallbackQuery.message.chat.id)
     else:
-        buttons = stream_markup(_, videoid, chat_id)
+        buttons = stream_markup(_, videoid, CallbackQuery.message.chat.id)
     chat_id = CallbackQuery.message.chat.id
     try:
         await CallbackQuery.edit_message_reply_markup(
             reply_markup=InlineKeyboardMarkup(buttons)
         )
-    except:
+    except Exception:
         return
     if chat_id not in wrong:
         wrong[chat_id] = {}
@@ -80,7 +72,7 @@ async def del_back_playlist(client, CallbackQuery, _):
 
 @app.on_callback_query(filters.regex("Pages") & ~BANNED_USERS)
 @languageCB
-async def del_back_playlist(client, CallbackQuery, _):
+async def del_back_playlist(client, CallbackQuery: CallbackQuery, _):
     await CallbackQuery.answer()
     callback_data = CallbackQuery.data.strip()
     callback_request = callback_data.split(None, 1)[1]
@@ -90,22 +82,25 @@ async def del_back_playlist(client, CallbackQuery, _):
     if state == "Forw":
         if pages == 0:
             buttons = panel_markup_2(_, videoid, chat_id)
-        if pages == 2:
+        elif pages == 2:
             buttons = panel_markup_1(_, videoid, chat_id)
-        if pages == 1:
+        elif pages == 1:
             buttons = panel_markup_3(_, videoid, chat_id)
-    if state == "Back":
+    elif state == "Back":
         if pages == 2:
             buttons = panel_markup_2(_, videoid, chat_id)
-        if pages == 1:
+        elif pages == 1:
             buttons = panel_markup_1(_, videoid, chat_id)
-        if pages == 0:
+        elif pages == 0:
             buttons = panel_markup_3(_, videoid, chat_id)
+    else:
+        # Eğer beklenmeyen state gelirse, default davranış olabilir.
+        buttons = panel_markup_1(_, videoid, chat_id)
     try:
         await CallbackQuery.edit_message_reply_markup(
             reply_markup=InlineKeyboardMarkup(buttons)
         )
-    except:
+    except Exception:
         return
 
 
@@ -115,7 +110,7 @@ downvoters = {}
 
 @app.on_callback_query(filters.regex("ADMIN") & ~BANNED_USERS)
 @languageCB
-async def del_back_playlist(client, CallbackQuery, _):
+async def del_back_playlist(client, CallbackQuery: CallbackQuery, _):
     callback_data = CallbackQuery.data.strip()
     callback_request = callback_data.split(None, 1)[1]
     command, chat = callback_request.split("|")
@@ -205,7 +200,7 @@ async def del_back_playlist(client, CallbackQuery, _):
             )
         try:
             popped = check.pop(0)
-        except:
+        except Exception:
             return await CallbackQuery.answer(
                 _["admin_22"], show_alert=True
             )
@@ -239,9 +234,9 @@ async def del_back_playlist(client, CallbackQuery, _):
                 )
                 try:
                     return await ArchMusic.stop_stream(chat_id)
-                except:
+                except Exception:
                     return
-        except:
+        except Exception:
             try:
                 await CallbackQuery.edit_message_text(
                     f"{mention} tarafından atlandı"
@@ -250,7 +245,7 @@ async def del_back_playlist(client, CallbackQuery, _):
                     _["admin_10"].format(mention)
                 )
                 return await ArchMusic.stop_stream(chat_id)
-            except:
+            except Exception:
                 return
         await CallbackQuery.answer()
         queued = check[0]["file"]
@@ -260,6 +255,7 @@ async def del_back_playlist(client, CallbackQuery, _):
         videoid = check[0]["vidid"]
         status = True if str(streamtype) == "video" else None
         db[chat_id][0]["played"] = 0
+        duration = check[0].get("dur", "0:00")  # duration değişkeni eksikti, ekledim
         if "live_" in queued:
             n, link = await YouTube.video(videoid, True)
             if n == 0:
@@ -275,14 +271,13 @@ async def del_back_playlist(client, CallbackQuery, _):
             button = telegram_markup(_, chat_id)
             img = None
             run = await CallbackQuery.message.reply_text(
-                    text=_["stream_1"].format(
-                      title,
-                        f"https://t.me/{app.username}?start=info_{videoid}",
-                        duration,
-                        user,
-                    ),
-                    
-                )
+                text=_["stream_1"].format(
+                    title,
+                    f"https://t.me/{app.username}?start=info_{videoid}",
+                    duration,
+                    user,
+                ),
+            )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "tg"
             await CallbackQuery.edit_message_text(txt)
@@ -297,7 +292,7 @@ async def del_back_playlist(client, CallbackQuery, _):
                     videoid=True,
                     video=status,
                 )
-            except:
+            except Exception:
                 return await mystic.edit_text(_["call_9"])
             try:
                 await ArchMusic.skip_stream(
@@ -308,14 +303,13 @@ async def del_back_playlist(client, CallbackQuery, _):
             button = stream_markup(_, videoid, chat_id)
             img = None
             run = await CallbackQuery.message.reply_text(
-                    text=_["stream_1"].format(
-                      title,
-                        f"https://t.me/{app.username}?start=info_{videoid}",
-                        duration,
-                        user,
-                    ),
-                    
-                )
+                text=_["stream_1"].format(
+                    title,
+                    f"https://t.me/{app.username}?start=info_{videoid}",
+                    duration,
+                    user,
+                ),
+            )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "stream"
             await CallbackQuery.edit_message_text(txt)
@@ -331,14 +325,13 @@ async def del_back_playlist(client, CallbackQuery, _):
                 )
             button = telegram_markup(_, chat_id)
             run = await CallbackQuery.message.reply_text(
-                    text=_["stream_2"].format(
-                      title,
-                        f"https://t.me/{app.username}?start=info_{videoid}",
-                        duration,
-                        user,
-                    ),
-                    
-                )
+                text=_["stream_2"].format(
+                    title,
+                    f"https://t.me/{app.username}?start=info_{videoid}",
+                    duration,
+                    user,
+                ),
+            )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "tg"
             await CallbackQuery.edit_message_text(txt)
@@ -355,7 +348,6 @@ async def del_back_playlist(client, CallbackQuery, _):
                     text=_["stream_3"].format(
                         title, check[0]["dur"], user
                     ),
-                    
                 )
                 db[chat_id][0]["mystic"] = run
                 db[chat_id][0]["markup"] = "tg"
@@ -365,7 +357,6 @@ async def del_back_playlist(client, CallbackQuery, _):
                     text=_["stream_3"].format(
                         title, check[0]["dur"], user
                     ),
-                    
                 )
                 db[chat_id][0]["mystic"] = run
                 db[chat_id][0]["markup"] = "tg"
@@ -374,12 +365,11 @@ async def del_back_playlist(client, CallbackQuery, _):
                 img = None
                 run = await CallbackQuery.message.reply_text(
                     text=_["stream_1"].format(
-                      title,
+                        title,
                         f"https://t.me/{app.username}?start=info_{videoid}",
                         duration,
                         user,
                     ),
-                    
                 )
                 db[chat_id][0]["mystic"] = run
                 db[chat_id][0]["markup"] = "stream"
@@ -410,19 +400,16 @@ async def del_back_playlist(client, CallbackQuery, _):
             if (duration_played - duration_to_skip) <= 10:
                 bet = seconds_to_min(duration_played)
                 return await CallbackQuery.answer(
-                    f"Bot toplam süre aşıldığı için arama yapamıyor.\n\nŞu anda oynanan** {bet}** dakika/**{duration}** dakika",
-                  show_alert=True, 
+                    f"Bot toplam süre aşıldığı için arama yapamıyor.\n\nŞu anda oynanan **{bet}** dakika/**{duration}** dakika",
+                    show_alert=True,
                 )
             to_seek = duration_played - duration_to_skip + 1
         else:
-            if (
-                duration_seconds
-                - (duration_played + duration_to_skip)
-            ) <= 10:
+            if (duration_seconds - (duration_played + duration_to_skip)) <= 10:
                 bet = seconds_to_min(duration_played)
                 return await CallbackQuery.answer(
-                    f"Bot toplam süre aşıldığı için arama yapamıyor.\n\nŞu anda oynanan** {bet}** dakika/**{duration}** dakika", 
-                  show_alert=True,
+                    f"Bot toplam süre aşıldığı için arama yapamıyor.\n\nŞu anda oynanan **{bet}** dakika/**{duration}** dakika",
+                    show_alert=True,
                 )
             to_seek = duration_played + duration_to_skip + 1
         await CallbackQuery.answer()
@@ -441,7 +428,7 @@ async def del_back_playlist(client, CallbackQuery, _):
                 duration,
                 playing[0]["streamtype"],
             )
-        except:
+        except Exception:
             return await mystic.edit_text(_["admin_34"])
         if int(command) in [1, 3]:
             db[chat_id][0]["played"] -= duration_to_skip
