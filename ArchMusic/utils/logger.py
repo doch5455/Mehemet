@@ -34,8 +34,7 @@ def safe_username(user):
 
 # 📌 Log mesajı şablonu
 def build_log_text(message, user, chatusername, username, uye_sayisi,
-                   CPU, RAM, DISK, toplam_grup, aktif_sesli, aktif_video,
-                   streamtype, duration, filesize, start_time, end_time, requester):
+                   CPU, RAM, DISK, toplam_grup, aktif_sesli, aktif_video):
     return f"""
 🔊 **Yeni Müzik Oynatıldı**
 
@@ -47,13 +46,7 @@ def build_log_text(message, user, chatusername, username, uye_sayisi,
 ✨ **Kullanıcı Adı:** {username}  
 🔢 **Kullanıcı ID:** `{user.id}`  
 
-🔎 **Sorgu:** {message.text}  
-🎶 **Oynatma Türü:** `{streamtype}`  
-⏱️ **Süre:** `{duration}`  
-💾 **Dosya Boyutu:** `{filesize}`  
-🕒 **Başlatılma Zamanı:** `{start_time}`  
-🔚 **Bitiş Zamanı:** `{end_time}`  
-🙋 **Ekleyen Kullanıcı:** `{requester}`
+🔎 **Sorgu:** {message.text}
 
 💻 **Sistem Durumu**
 ├ 🖥️ CPU: `{CPU}`
@@ -68,7 +61,7 @@ def build_log_text(message, user, chatusername, username, uye_sayisi,
 
 
 # 📌 Ana fonksiyon
-async def play_logs(message, streamtype, duration, filesize, start_time, end_time, requester):
+async def play_logs(message, streamtype):
     chat_id = message.chat.id
     user = message.from_user
 
@@ -88,8 +81,7 @@ async def play_logs(message, streamtype, duration, filesize, start_time, end_tim
     if await is_on_off(LOG):
         logger_text = build_log_text(
             message, user, chatusername, username, uye_sayisi,
-            CPU, RAM, DISK, toplam_grup, aktif_sesli, aktif_video,
-            streamtype, duration, filesize, start_time, end_time, requester
+            CPU, RAM, DISK, toplam_grup, aktif_sesli, aktif_video
         )
 
         # Log mesajını gönder
