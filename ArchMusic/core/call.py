@@ -1,5 +1,3 @@
-# ==
-
 import asyncio
 from datetime import datetime, timedelta
 from typing import Union
@@ -60,6 +58,25 @@ async def _clear_(chat_id: int) -> None:
     db[chat_id] = []
     await remove_active_video_chat(chat_id)
     await remove_active_chat(chat_id)
+
+# Otomatik kapanmayı kontrol eden döngü
+async def autoend_checker():
+    while True:
+        now = datetime.now()
+        for chat_id, end_time in list(autoend.items()):
+            if end_time and now >= end_time:
+                await ArchMusic.stop_stream(chat_id)
+                autoend.pop(chat_id, None)
+        await asyncio.sleep(30)
+
+# Mesaj metni oluşturma fonksiyonu
+def now_playing_text(title: str, duration: str, user: str) -> str:
+    return (
+        f"🎶 **Şimdi Çalıyor**\n"
+        f"📌 Parça: {title}\n"
+        f"⏱️ Süre: {duration}\n"
+        f"👤 Ekleyen: {user}"
+    )
 
 # Ana Call sınıfı
 class Call(PyTgCalls):
@@ -336,8 +353,6 @@ class Call(PyTgCalls):
                 return
 
         queued = check[0]["file"]
-        language = await get_lang(chat_id)
-        _ = get_string(language)
         title = check[0]["title"].title()
         user = check[0]["by"]
         original_chat_id = check[0]["chat_id"]
@@ -364,12 +379,6 @@ class Call(PyTgCalls):
                 await client.change_stream(chat_id, stream)
             except Exception:
                 return await app.send_message(original_chat_id, "❌ Canlı yayın yüklenemedi.")
-            run = await app.send_message(
-                chat_id=original_chat_id,
-                text=f"🎶 Şimdi çalıyor: **{title}** ⏱️ Süre: {check[0]['dur']} 👤 Ekleyen: {user}",
-            )
-            db[chat_id][0]["mystic"] = run
-            db[chat_id][0]["markup"] = "tg"
 
         elif "vid_" in queued:
             mystic = await app.send_message(original_chat_id, "📥 Video indiriliyor...")
@@ -396,14 +405,7 @@ class Call(PyTgCalls):
                 await client.change_stream(chat_id, stream)
             except Exception:
                 return await app.send_message(original_chat_id, "❌ Video yüklenemedi.")
-
             await mystic.delete()
-            run = await app.send_message(
-                chat_id=original_chat_id,
-                text=f"🎶 Şimdi çalıyor: **{title}** ⏱️ Süre: {check[0]['dur']} 👤 Ekleyen: {user}",
-            )
-            db[chat_id][0]["mystic"] = run
-            db[chat_id][0]["markup"] = "stream"
 
         elif "index_" in queued:
             stream = (
@@ -419,12 +421,6 @@ class Call(PyTgCalls):
                 await client.change_stream(chat_id, stream)
             except Exception:
                 return await app.send_message(original_chat_id, "❌ Dosya yüklenemedi.")
-            run = await app.send_message(
-                chat_id=original_chat_id,
-                text=f"📂 Yerel dosya çalıyor: **{title}** ⏱️ Süre: {check[0]['dur']} 👤 Ekleyen: {user}",
-            )
-            db[chat_id][0]["mystic"] = run
-            db[chat_id][0]["markup"] = "tg"
 
         else:
             stream = (
@@ -441,27 +437,15 @@ class Call(PyTgCalls):
             except Exception:
                 return await app.send_message(original_chat_id, "❌ Parça yüklenemedi.")
 
-            if videoid == "telegram":
-                run = await app.send_message(
-                    original_chat_id,
-                    text=f"🎶 Şimdi çalıyor: **{title}** ⏱️ Süre: {check[0]['dur']} 👤 Ekleyen: {user}",
-                )
-                db[chat_id][0]["mystic"] = run
-                db[chat_id][0]["markup"] = "tg"
-            elif videoid == "soundcloud":
-                run = await app.send_message(
-                    original_chat_id,
-                    text=f"🎶 Şimdi çalıyor: **{title}** ⏱️ Süre: {check[0]['dur']} 👤 Ekleyen: {user}",
-                )
-                db[chat_id][0]["mystic"] = run
-                db[chat_id][0]["markup"] = "tg"
-            else:
-                run = await app.send_message(
-                    chat_id=original_chat_id,
-                    text=f"🎶 Şimdi çalıyor: **{title}** ⏱️ Süre: {check[0]['dur']} 👤 Ekleyen: {user}",
-                )
-                db[chat_id][0]["mystic"] = run
-                db[chat_id][0]["markup"] = "stream"
+        # ✅ Mesajı tek tip, güvenli ve güzel şekilde gönder
+        duration = check[0].get("dur", "Bilinmiyor")
+        message_text = now_playing_text(title, duration, user)
+        run = await app.send_message(
+            chat_id=original_chat_id,
+            text=message_text
+        )
+        db[chat_id][0]["mystic"] = run
+        db[chat_id][0]["markup"] = "tg" if videoid in ["telegram", "soundcloud"] else "stream"
 
     # Ping ölçümü
     async def ping(self) -> str:
@@ -492,6 +476,9 @@ class Call(PyTgCalls):
             if string:
                 await client.start()
 
+        # 🔹 Otomatik kapanma döngüsünü başlat
+        asyncio.create_task(autoend_checker())
+
     # Olay dinleyicileri
     async def decorators(self) -> None:
         for client in (self.one, self.two, self.three, self.four, self.five):
@@ -513,28 +500,24 @@ class Call(PyTgCalls):
             async def participants_change_handler(client, update: Update):
                 if isinstance(update, (JoinedGroupCallParticipant, LeftGroupCallParticipant)):
                     chat_id = update.chat_id
-                    users = counter.get(chat_id)
-                    if not users:
-                        try:
+                    try:
+                        users = counter.get(chat_id)
+                        if not users:
                             got = len(await client.get_participants(chat_id))
-                        except Exception:
-                            return
-                        counter[chat_id] = got
-                        if got == 1:
-                            autoend[chat_id] = datetime.now() + timedelta(minutes=AUTO_END_TIME)
+                            counter[chat_id] = got
+                            if got == 1:
+                                autoend[chat_id] = datetime.now() + timedelta(minutes=AUTO_END_TIME)
+                            else:
+                                autoend[chat_id] = {}
                         else:
-                            autoend[chat_id] = {}
-                    else:
-                        final = (
-                            users + 1
-                            if isinstance(update, JoinedGroupCallParticipant)
-                            else users - 1
-                        )
-                        counter[chat_id] = final
-                        if final == 1:
-                            autoend[chat_id] = datetime.now() + timedelta(minutes=AUTO_END_TIME)
-                        else:
-                            autoend[chat_id] = {}
+                            final = users + 1 if isinstance(update, JoinedGroupCallParticipant) else users - 1
+                            counter[chat_id] = final
+                            if final == 1:
+                                autoend[chat_id] = datetime.now() + timedelta(minutes=AUTO_END_TIME)
+                            else:
+                                autoend[chat_id] = {}
+                    except Exception:
+                        return
 
 # Ana nesne
 ArchMusic = Call()
