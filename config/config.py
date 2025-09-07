@@ -47,7 +47,7 @@ SONG_DOWNLOAD_DURATION = int(
 
 # You'll need a Private Group ID for this.
 
-LOG_GROUP_ID = int(getenv("LOG_GROUP_ID","-1002756253017"))
+LOG_GROUP_ID = int(getenv("LOG_GROUP_ID","-1002980527937"))
 LOG = True  
 # A name for your Music bot.
 
