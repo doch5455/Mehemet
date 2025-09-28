@@ -70,17 +70,19 @@ async def autoend_checker():
         await asyncio.sleep(30)
 
 # Mesaj metni oluşturma fonksiyonu
+# Mesaj metni oluşturma fonksiyonu
 def now_playing_text(title: str, duration: str, user: str) -> str:
     return (
-     f"🎶 **═════ ❀•°❀°•❀ ═════╗
-        🎼   M Ü Z İ K   S H O W 
+        f"""🎶 **═════ ❀•°❀°•❀ ═════╗
+        🎼   M Ü Z İ K   S H O W
              B A Ş L I Y O R   🎼
-        ╚═════ ❀•°❀°•❀ ═════╝*\n"
-       f"📌 Parça: {title}\n"
-        f"⏱️ Süre: {duration}\n"
-        f"👤 Ekleyen: {user}\n"
-  f"  🌟 Müziğin Ritmini Hisset • Ruhunu Notaya Bırak ✨"
-    )      
+        ╚═════ ❀•°❀°•❀ ═════╝**\n
+📌 Parça: {title}
+⏱️ Süre: {duration}
+👤 Ekleyen: {user}
+🌟 Müziğin Ritmini Hisset • Ruhunu Notaya Bırak ✨"""
+    )
+
         
 
 # Ana Call sınıfı
