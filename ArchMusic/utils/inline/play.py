@@ -35,23 +35,28 @@ def stream_markup_timer(_, videoid, chat_id, played, dur):
     bar = get_progress_bar(percentage)
 
     buttons = [
-        [InlineKeyboardButton(text=f"{played_time} {bar} {total_time}", callback_data="GetTimer")],
-        [InlineKeyboardButton(text="🏃‍♂️ Sürekli Oynat", callback_data=f"ADMIN Loop|{chat_id}")],
+        # Başlık
+        [InlineKeyboardButton(text="DEEZER DESTEK", callback_data="support")],
+
+        # Süre barı
+        [InlineKeyboardButton(text=f"{played_time} ❤️ {bar} {total_time}", callback_data="GetTimer")],
+
+        # Kontroller
         [
-            InlineKeyboardButton(text="⏪ -10s", callback_data=f"ADMIN 1|{chat_id}"),
-            InlineKeyboardButton(text="⏩ +10s", callback_data=f"ADMIN 2|{chat_id}"),
-            InlineKeyboardButton(text="⏪ -30s", callback_data=f"ADMIN 3|{chat_id}"),
-            InlineKeyboardButton(text="⏩ +30s", callback_data=f"ADMIN 4|{chat_id}"),
+            InlineKeyboardButton(text="⏮️", callback_data=f"ADMIN Prev|{chat_id}"),
+            InlineKeyboardButton(text="⏸️ / ▶️", callback_data=f"ADMIN PlayPause|{chat_id}"),
+            InlineKeyboardButton(text="⏭️", callback_data=f"ADMIN Next|{chat_id}"),
+            InlineKeyboardButton(text="⏹️", callback_data=f"ADMIN Stop|{chat_id}"),
         ],
+
+        # Alt satır
         [
-            InlineKeyboardButton(text="▶️ Başlat", callback_data=f"ADMIN Resume|{chat_id}"),
-            InlineKeyboardButton(text="⏸ Duraklat", callback_data=f"ADMIN Pause|{chat_id}"),
-            InlineKeyboardButton(text="⏭ Atlama", callback_data=f"ADMIN Skip|{chat_id}"),
-            InlineKeyboardButton(text="🟥 Bitir", callback_data=f"ADMIN Stop|{chat_id}"),
+            InlineKeyboardButton(text="✅ Listeye Ekle", callback_data=f"AddToList|{chat_id}"),
+            InlineKeyboardButton(text="🔮 Kontrol Paneli", callback_data=f"PanelMarkup None|{chat_id}"),
         ],
-        [InlineKeyboardButton(text="❌ Menüyü Kapat", callback_data="close")],
     ]
     return buttons
+
 
 
 def stream_markup(_, videoid, chat_id):
