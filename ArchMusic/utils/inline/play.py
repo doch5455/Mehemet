@@ -1,4 +1,4 @@
-from pyrogram.types import InlineKeyboardButton
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from ArchMusic.utils.formatters import time_to_seconds
 
 
@@ -15,7 +15,7 @@ def format_duration(duration):
 
 # ---------- Stream Markup ----------
 
- stream_markup_timer(chat_id: int, played: int, dur: int):
+def stream_markup_timer(chat_id: int, played: int, dur: int):
     """Ana müzik paneli (süre + panel butonu)"""
     played_time = format_duration(played)
     total_time = format_duration(dur)
@@ -25,7 +25,6 @@ def format_duration(duration):
         [InlineKeyboardButton(text="🔮 SES Paneli", callback_data=f"PanelMarkup|{chat_id}")],
     ]
     return InlineKeyboardMarkup(buttons)
-
 
 
 def stream_markup(_, videoid, chat_id):
