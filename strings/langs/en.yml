@@ -226,7 +226,7 @@ queue_4 : "🎻<b> Sıraya Eklendi **#{0} \n\n<🎼**Parça:** {1}\n🧬 **Süre
 queue_5 : "**Sırada Sadece Bir Parça Var**, **Lütfen Biraz Daha Parça Ekleyin.**"
 
 #  BY
-stream_1 : "╔═⫷❝ ➲ 𝙔𝘼𝙔𝙄𝙉 𝘽𝘼𝙎𝙇𝘼𝘿𝙄 ❞⫸\n════════════════\n🔮 𝘽𝙄𝙇𝙂𝙄:\n{0}\n════════════════\n⌛️ 𝙎𝙐𝙍𝙀: {2}\n════════════════\n👤 𝙏𝘼𝙇𝙀𝙋 𝙀𝘿𝙀𝙉: {3}\n╚═══════════════ "
+stream_1 : "✨🌙╔═⫸❝ 𝙔𝘼𝙔𝙄𝙉 𝘽𝘼𝙎𝙇𝘼𝘿𝙄 ❞⫷🌙✨\n💠📖 𝘽𝙄𝙇𝙂𝙄: 📖💠\n{0}\n⏳🌟 𝙎𝙐𝙍𝙀: 🌟⏳ {2}\n👤💫 𝙏𝘼𝙇𝙀𝙋 𝙀𝘿𝙀𝙉: 💫👤 {3}\n"
 stream_2 : "🎵 **<u>Dinleniyor:**</u>\n\n→ **<u>Parça</u>:** __{0}__\n→ **<u>Süre</u>:** __{2}__\n→ **<u>Talep Eden</u>:** __{3}__"
 stream_3 : "🎼 **<u>Şarkı Detayları:**</u>\n\n→ **<u>Şarkı</u>:** __{0}__\n→ **<u>Süre</u>:** __{2}__\n→ **<u>İstek Sahibi</u>:** __{3}__"
 stream_4 : "🎧 **<u>Şimdi Çalan:**</u>\n\n→ **<u>Şarkı Adı</u>:** __{0}__\n→ **<u>Süre</u>:** __{2}__\n→ **<u>Talep</u>:** __{3}__"
@@ -247,22 +247,20 @@ L_B_1 : "❄️ Şarkı Sözlerini Şimdi Kontrol Et"
 
 # Start
 
-S_B_1 : "yardım & komutlar ❓"
-S_B_2 : "🔧 𝗔𝘆𝗮𝗿𝗹𝗮𝗿"
-S_B_3 : "🍂 destek 🍂"
-S_B_4 : " 🍂 kanal 🍂"
-S_B_5 : "˹beni kaçır güzelim˼ "
-S_B_6 : "💡 𝗞𝗮𝘆𝗻𝗮𝗸 𝗞𝗼𝗱𝘂"
-S_B_7 : "sahip ✔︎"
-S_B_8 : "yardım & komutlar ❓ " 
+S_B_1 : "❓ Yardım & Komutlar"
+S_B_2 : "⚙️Ayarlar"
+S_B_3 :" 🍃 Destek "
+S_B_4 : "📢 Kanal"
+S_B_5 : "💫 ˹Beni Kaçır, Güzelim˼"
+S_B_7 : "👑 Sahip"
+S_B_8 : "❓ Yardım & Komutlar"
+
         
 #Help 
-H_B_1 :  "💥ETİKET KOMUTU"
-H_B_2 :  "🟡Eğlence komutları"
-H_B_3 :  "DEĞİSTİRME KOMUTU"
-H_B_4 :  "🥁𝗢𝘆𝗻𝗮𝘁𝗺𝗮 𝗞𝗼𝗺𝘂𝘁𝗹𝗮𝗿ı"
-H_B_5 : "📻OYNATMA LİSTESİ"
-H_B_6 : " BOT KOMUTLARİ"
+H_B_1 :  "💠 Etiket Komutları"
+H_B_2 :  "🎉 Eğlence Komutları"
+H_B_3 :  "🎵 Müzik Komutları"
+H_B_4 :  "🥏 Bot Komutları"
 
 
 
