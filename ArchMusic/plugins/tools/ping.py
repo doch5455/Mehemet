@@ -1,4 +1,4 @@
-   from datetime import datetime
+from datetime import datetime
 import io
 
 from pyrogram import filters
@@ -75,7 +75,6 @@ def create_ping_image(cpu, ram, gpu, disk, ping_ms):
     draw.text((20, 110), f"Disk: {disk}", fill="white", font=font)
     draw.text((20, 140), f"Ping: {ping_ms:.2f} ms", fill="white", font=font)
 
-    # Görseli byteIO olarak döndür
     bio = io.BytesIO()
     bio.name = "ping.png"
     image.save(bio, "PNG")
@@ -96,10 +95,8 @@ async def ping_com(client, message: Message, _):
     UP, CPU, RAM, DISK, GPU, TOTAL_CHATS, TOTAL_USERS = await bot_sys_stats()
     resp = (datetime.now() - start).microseconds / 1000
 
-    # Ping görselini oluştur
     ping_image = create_ping_image(CPU, RAM, GPU, DISK, resp)
 
-    # Mesajı güncelle ve görsel ile gönder
     await response.delete()
     await message.reply_photo(
         photo=ping_image,
@@ -113,4 +110,3 @@ async def ping_com(client, message: Message, _):
             "⚡ Hızlı Ping | 📊 Sistem Durumu ✅"
         )
     )
-
