@@ -1,10 +1,11 @@
-
 import asyncio
+from collections import deque
 from pyrogram import filters, types
+from pyrogram.enums import ParseMode
 from ArchMusic import app
 import speedtest
-from collections import deque
 
+# Komutlar
 HIZ_TESTI_KOMUTLARI = ["speedtest", "hiztesti"]
 
 # Kuyruk sistemi
@@ -27,15 +28,18 @@ def hiz_grafik_otomatik(indir, yukle, bar_length=20):
     yukle_bar = "🟩" * int((yukle/max_speed)*bar_length) + "⬜" * (bar_length - int((yukle/max_speed)*bar_length))
     return indir_bar, yukle_bar
 
-# Başlatma komutu: inline buton
+# Komut: Hız testi başlatma butonu
 @app.on_message(filters.command(HIZ_TESTI_KOMUTLARI))
 async def speedtest_start(client, mesaj):
     button = types.InlineKeyboardMarkup(
         [[types.InlineKeyboardButton("🚀 Hız Testini Başlat", callback_data="start_speedtest")]]
     )
-    await mesaj.reply_text("Hız testi yapmak için aşağıdaki butona tıklayın:", reply_markup=button)
+    await mesaj.reply_text(
+        "📶 Hız testi yapmak için aşağıdaki butona tıklayın:",
+        reply_markup=button
+    )
 
-# Callback: Butona basıldığında test başlar
+# Callback: Hız testi sıralı olarak çalışır
 @app.on_callback_query(filters.regex("start_speedtest"))
 async def speedtest_callback(client, callback_query):
     user_id = callback_query.from_user.id
@@ -43,18 +47,20 @@ async def speedtest_callback(client, callback_query):
 
     # Kuyruğa ekle
     test_kuyrugu.append((user_id, callback_query))
-    
+    await callback_query.answer("✅ Test sırasına eklendin.", show_alert=False)
+
     async with test_lock:
-        # Sadece kuyruğun başındaki kullanıcı testi yapar
         while test_kuyrugu:
             current_user, current_callback = test_kuyrugu[0]
+
+            # Sırada değilse bekle
             if current_user != user_id:
-                # Eğer sırada değilsen bekle
-                await current_callback.answer("⚠ Test sırasını bekleyin...", show_alert=True)
+                await callback_query.answer("⏳ Sıranı bekliyorsun...", show_alert=True)
                 return
 
-            await current_callback.answer("Test başlatılıyor...", show_alert=False)
-            m_edit = await current_callback.message.edit_text("📡 Hız testi başlatılıyor...")
+            # Test başlat
+            await current_callback.answer("🚀 Hız testi başlatılıyor...", show_alert=False)
+            m_edit = await current_callback.message.edit_text("📡 Hız testi yapılıyor...")
 
             try:
                 sonuc = await hiz_testi()
@@ -90,15 +96,17 @@ async def speedtest_callback(client, callback_query):
 <b>» Ping:</b> {ping_ms} ms
 <b>» Konum:</b> <a href="{server_map}">Haritada Göster</a>
 
-<b>» İndirme Hızı:</b> {indir_mbps} Mbps {indir_grafik}
-<b>» Yükleme Hızı:</b> {yukle_mbps} Mbps {yukle_grafik}
+<b>» İndirme:</b> {indir_mbps} Mbps {indir_grafik}
+<b>» Yükleme:</b> {yukle_mbps} Mbps {yukle_grafik}
 """
 
             share_url = sonuc.get("share")
             if share_url:
-                await m.reply_photo(share_url, caption=cikti, parse_mode="HTML")
+                await m.reply_photo(
+                    share_url, caption=cikti, parse_mode=ParseMode.HTML
+                )
             else:
-                await m.reply_text(cikti, parse_mode="HTML")
+                await m.reply_text(cikti, parse_mode=ParseMode.HTML)
 
             await m_edit.delete()
             test_kuyrugu.popleft()  # Kuyruktan çıkar
