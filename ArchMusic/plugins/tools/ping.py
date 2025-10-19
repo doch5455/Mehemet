@@ -37,7 +37,7 @@ async def ping_com(client, message: Message, _):
         end_time = datetime.now()
         response_time_ms = (end_time - start_time).microseconds / 1000
 
-        # Ping sonucu mesajı
+        # Kullanıcıya ping mesajı (direkt metin)
         ping_message = f"""
 **🎵 {MUSIC_BOT_NAME} Ping Sonuçları**
 
@@ -76,4 +76,4 @@ async def ping_com(client, message: Message, _):
 
     except Exception as e:
         await message.reply_text(f"❌ Ping alınırken bir hata oluştu.\nHata: {e}")
-       
+        
