@@ -1,12 +1,13 @@
 import asyncio
 import speedtest
+import time
 from pyrogram import filters
 from pyrogram.types import Message
-import time
-
 from ArchMusic import app
-from ArchMusic import SUDOERS
 from ArchMusic.utils.decorators.language import language
+
+# SUDOERS: Botun izinli kullanıcılarının Telegram ID'lerini buraya ekle
+SUDOERS = [123456789]  # Örnek: kendi Telegram ID'nizi buraya yazın
 
 def format_speed(bps):
     """Bps cinsinden hızı Mbps olarak döner"""
@@ -32,7 +33,7 @@ def run_speedtest_real_time(_, m):
         while True:
             download_speed = test.download()
             elapsed = time.time() - start
-            percentage = min((elapsed / 10) * 100, 100)  # Tahmini %10/sn, 10 saniyede bitir
+            percentage = min((elapsed / 10) * 100, 100)  # Tahmini 10 saniyede bitir
             bar = progress_bar(percentage)
             m.edit_text(f"İndirme: {bar} ({format_speed(download_speed)})")
             if percentage >= 100:
@@ -63,7 +64,7 @@ def run_speedtest_real_time(_, m):
         m.edit_text(f"<code>{e}</code>")
         return None
 
-@app.on_message(filters.command(["speedtest", "spt"]) & SUDOERS)
+@app.on_message(filters.command(["speedtest", "spt"]) & filters.user(SUDOERS))
 @language
 async def speedtest_function(client, message: Message, _):
     m = await message.reply_text(_["server_11"] + "\nSpeedtest başlatılıyor...")
@@ -87,3 +88,4 @@ async def speedtest_function(client, message: Message, _):
 
     await message.reply_photo(photo=result["share"], caption=output)
     await m.delete()
+    
