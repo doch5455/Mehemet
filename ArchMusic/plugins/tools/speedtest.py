@@ -19,30 +19,30 @@ def progress_bar(percentage, length=20):
     bar = "█" * filled_length + "─" * (length - filled_length)
     return f"[{bar}] {percentage:.0f}%"
 
-def run_speedtest_real_time(_, m):
+def run_speedtest_real_time(m):
     """Download ve upload hızını saniye saniye güncelleyerek test eder"""
     try:
         test = speedtest.Speedtest()
         test.get_best_server()
-        m.edit_text(_["server_12"] + "\nSunucu seçildi...")
+        m.edit_text("Sunucu seçildi ✅")
 
         # Download ölçümü
-        m.edit_text(_["server_13"] + "\nİndirme başlıyor...")
+        m.edit_text("İndirme başlıyor ⏳")
         download_speed = 0
         start = time.time()
         while True:
             download_speed = test.download()
             elapsed = time.time() - start
-            percentage = min((elapsed / 10) * 100, 100)  # Tahmini 10 saniyede bitir
+            percentage = min((elapsed / 10) * 100, 100)
             bar = progress_bar(percentage)
             m.edit_text(f"İndirme: {bar} ({format_speed(download_speed)})")
             if percentage >= 100:
                 break
             time.sleep(1)
-        m.edit_text(_["server_13"] + f"\nİndirme tamamlandı: {format_speed(download_speed)}")
+        m.edit_text(f"İndirme tamamlandı ✅ ({format_speed(download_speed)})")
 
         # Upload ölçümü
-        m.edit_text(_["server_14"] + "\nYükleme başlıyor...")
+        m.edit_text("Yükleme başlıyor ⏳")
         upload_speed = 0
         start = time.time()
         while True:
@@ -54,7 +54,7 @@ def run_speedtest_real_time(_, m):
             if percentage >= 100:
                 break
             time.sleep(1)
-        m.edit_text(_["server_14"] + f"\nYükleme tamamlandı: {format_speed(upload_speed)}")
+        m.edit_text(f"Yükleme tamamlandı ✅ ({format_speed(upload_speed)})")
 
         # Sonuçları paylaş
         test.results.share()
@@ -67,24 +67,22 @@ def run_speedtest_real_time(_, m):
 @app.on_message(filters.command(["speedtest", "spt"]) & filters.user(SUDOERS))
 @language
 async def speedtest_function(client, message: Message, _):
-    m = await message.reply_text(_["server_11"] + "\nSpeedtest başlatılıyor...")
+    m = await message.reply_text("Speedtest başlatılıyor... ⏳")
 
     # Speedtest'i ayrı thread'te çalıştır
-    result = await asyncio.to_thread(run_speedtest_real_time, _, m)
+    result = await asyncio.to_thread(run_speedtest_real_time, m)
 
     if not result:
         return
 
-    output = _["server_15"].format(
-        result["client"]["isp"],
-        result["client"]["country"],
-        result["server"]["name"],
-        result["server"]["country"],
-        result["server"]["cc"],
-        result["server"]["sponsor"],
-        result["server"]["latency"],
-        result["ping"],
-    )
+    output = f"""
+**ISP:** {result['client']['isp']}
+**Ülke:** {result['client']['country']}
+**Sunucu:** {result['server']['name']} ({result['server']['country']})
+**Sponsor:** {result['server']['sponsor']}
+**Ping:** {result['ping']} ms
+**Latency:** {result['server']['latency']} ms
+"""
 
     await message.reply_photo(photo=result["share"], caption=output)
     await m.delete()
