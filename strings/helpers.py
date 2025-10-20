@@ -12,10 +12,6 @@ HELP_1 = """<u>💠 ETİKET KOMUTLARI 💠</u>
 🌈 /rtag   - Grubunuzdaki tüm üyeleri rastgele renklerle etiketler
 📌 /stag   - Seçtiğiniz birisini seçtiğiniz sticker ile etiketler (Gizli Etiket 😶‍🌫️)
 🎯 /itag   - Seçtiğiniz birisini rastgele bir emoji ile etiketleyin
-"""
-
-HELP_2 = """<u>🎉 EĞLENCE KOMUTLARI 🎉</u>
-
 🎲 /dice     - Rastgele bir zar atın
 🪙 /coin     - Rastgele bir para atın
 👋 /slap     - Birini tokatlayın
@@ -23,14 +19,11 @@ HELP_2 = """<u>🎉 EĞLENCE KOMUTLARI 🎉</u>
 🤣 /joke     - Rastgele bir şaka gönderin
 📜 /soz      - Rastgele bir söz gönderin
 📢 /tts      - Bir metni sesli olarak okutun
-🎴 /sticker  - Bir fotoğrafı çıkartmaya dönüştürün
-📸 /photo    - Bir çıkartmayı fotoğrafa dönüştürün
-🎥 /fileid   - Telegram'daki herhangi bir dosyanın ID'sini alın
-📱 /qrcode   - Bir metni QR koduna dönüştürün
-📱 /barcode  - Bir metni barkoduna dönüştürün (EAN13)
 """
 
-HELP_3 = """<b>🎵 MÜZİK KOMUTLARI 🎵</b>
+
+
+HELP_2= """<b>🎵 MÜZİK KOMUTLARI 🎵</b>
 
 ⏸️ /duraklat       - Müziği duraklatır
 ▶️ /devam          - Müziği devam ettirir
@@ -52,7 +45,7 @@ HELP_3 = """<b>🎵 MÜZİK KOMUTLARI 🎵</b>
 📃 /oynat
 """
 
-HELP_4= """🥏 <u>BOT KOMUTLARI</u>
+HELP_3= """🥏 <u>BOT KOMUTLARI</u>
 
 ⚡ /start          - Başlatma panelini gösterir
 ⚙️ /ayarlar        - Ayarlar menüsüne ulaşır
