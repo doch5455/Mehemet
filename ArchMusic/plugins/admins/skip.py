@@ -119,7 +119,8 @@ async def skip(cli, message: Message, _, chat_id):
                 f"https://t.me/{app.username}?start=info_{videoid}",
                 check[0]["dur"],
                 user,
-            ),
+            reply_markup=InlineKeyboardMarkup(stream_markup(_, title, chat_id))
+            )
         )
         db[chat_id][0]["mystic"] = run
         db[chat_id][0]["markup"] = None
@@ -145,7 +146,8 @@ async def skip(cli, message: Message, _, chat_id):
                 f"https://t.me/{app.username}?start=info_{videoid}",
                 check[0]["dur"],
                 user,
-            ),
+            reply_markup=InlineKeyboardMarkup(stream_markup(_, title, chat_id))
+            )
         )
         db[chat_id][0]["mystic"] = run
         db[chat_id][0]["markup"] = None
@@ -162,7 +164,8 @@ async def skip(cli, message: Message, _, chat_id):
                 f"https://t.me/{app.username}?start=info_{videoid}",
                 check[0]["dur"],
                 user,
-            ),
+            reply_markup=InlineKeyboardMarkup(stream_markup(_, title, chat_id))
+            )
         )
         db[chat_id][0]["mystic"] = run
         db[chat_id][0]["markup"] = None
@@ -178,7 +181,8 @@ async def skip(cli, message: Message, _, chat_id):
                 f"https://t.me/{app.username}?start=info_{videoid}",
                 check[0]["dur"],
                 user,
-            ),
+            reply_markup=InlineKeyboardMarkup(stream_markup(_, title, chat_id))
+            )
         )
         db[chat_id][0]["mystic"] = run
         db[chat_id][0]["markup"] = None
