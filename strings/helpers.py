@@ -3,7 +3,7 @@
 # Minimal, modern, sade ve narin yapı
 # ===============================================
 
-HELP_2 = """<b>🎵 MÜZİK KOMUTLARI 🎵</b>
+HELP_1 = """<b>🎵 MÜZİK KOMUTLARI 🎵</b>
 
 ⏸️ /duraklat       - Müziği duraklatır
 ▶️ /devam          - Müziği devam ettirir
@@ -25,7 +25,7 @@ HELP_2 = """<b>🎵 MÜZİK KOMUTLARI 🎵</b>
 📃 /oynat
 """
 
-HELP_3 = """🥏 <u>BOT KOMUTLARI</u>
+HELP_2 = """🥏 <u>BOT KOMUTLARI</u>
 
 ⚡ /start          - Başlatma panelini gösterir
 ⚙️ /ayarlar        - Ayarlar menüsüne ulaşır
@@ -60,7 +60,7 @@ HELP_3 = """🥏 <u>BOT KOMUTLARI</u>
 📄 /gbannedusers      - Yasaklı kullanıcı listesini gösterir
 """
 
-HELP_4 = """<u>🎮 EĞLENCE & OYUN KOMUTLARI 🎮</u>
+HELP_3 = """<u>🎮 EĞLENCE & OYUN KOMUTLARI 🎮</u>
 
 🎯 /oyun - Oyun menüsünü açar
 💬 /dogruluk - Rastgele bir doğruluk sorusu gönderir
@@ -80,7 +80,7 @@ HELP_4 = """<u>🎮 EĞLENCE & OYUN KOMUTLARI 🎮</u>
 🌸 Eğlenmek için tek komut yeter!
 """
 
-HELP_1 = """<u>💠 ETİKET KOMUTLARI 💠</u>
+HELP_4 = """<u>💠 ETİKET KOMUTLARI 💠</u>
 🤖 /chatbot - Yapay zeka çalıştırır
 
 👥 /tag    - Grubunuzdaki tüm üyeleri isimleriyle etiketler
