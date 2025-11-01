@@ -36,7 +36,6 @@ def progress_bar(played, total):
 # ───────────────────────────────
 def stream_markup_timer(_, videoid, chat_id, played, dur):
     buttons = [
-        [InlineKeyboardButton("🌌 ᴍᴀᴠɪ ᴅᴜʏᴜʀᴜ 🌌", url="https://t.me/maviduyuru")],
         [InlineKeyboardButton(text=progress_bar(played, dur), callback_data="nonclickable")],
         [
             InlineKeyboardButton("⏮", callback_data=f"ADMIN 1|{chat_id}"),
@@ -46,9 +45,10 @@ def stream_markup_timer(_, videoid, chat_id, played, dur):
             InlineKeyboardButton("⏹", callback_data=f"stopvc {chat_id}"),
         ],
         [
-            InlineKeyboardButton("💎 Listeye Ekle", callback_data=f"add_playlist {videoid}"),
-            InlineKeyboardButton("✨ Kontrol Paneli", callback_data=f"PanelMarkup None|{chat_id}"),
-        ],
+            InlineKeyboardButton("🗑️ 𝗞𝗮𝗽𝗮𝘁", callback_data="close"),
+            InlineKeyboardButton("🩵 𝗞𝗮𝗻𝗮𝗹", url="https://t.me/maviduyuru"
+          ),
+       ]
     ]
     return buttons
 
@@ -68,7 +68,7 @@ def telegram_markup_timer(_, chat_id, played, dur, videoid):
             InlineKeyboardButton("⏹", callback_data=f"stopvc {chat_id}"),
         ],
         [
-            InlineKeyboardButton("💎 Listeye Ekle", callback_data=f"add_playlist {videoid}"),
+            InlineKeyboardButton("🗑️ 𝗞𝗮𝗽𝗮𝘁", callback_data="close"),
             InlineKeyboardButton("✨ Kontrol Paneli", callback_data=f"PanelMarkup None|{chat_id}"),
         ],
     ]
