@@ -1,5 +1,4 @@
 import random
-
 from pyrogram.types import InlineKeyboardButton
 
 selection = [
@@ -18,115 +17,35 @@ selection = [
     "▃▅▂▅▃▇▄▅▃",
 ]
 
-
-def stream_markup_timer(_, videoid, chat_id, played, dur):
-    played_sec = time_to_sec(played)
-    total_sec = time_to_sec(dur)
-    if total_sec == 0:
-        total_sec = 1
-    ratio = played_sec / total_sec
-    pos = int(ratio * 8)
-
-    # İlerleme çubuğu (tam görseldeki gibi)
-    bar_symbols = ["➖"] * 8
-    if pos >= len(bar_symbols):
-        pos = len(bar_symbols) - 1
-    bar_symbols[pos] = "🔘"
-    bar = "".join(bar_symbols)
-
-    # Butonlar
-    buttons = [
-        [
-            InlineKeyboardButton("🚀 Kumsal Bots 🚀", url="https://t.me/the_team_kumsal")
-        ],
-        [
-            InlineKeyboardButton(f"{played}  ⟪ {bar} ⟫  {dur}", callback_data="nonclickable")
-        ],
-        [
-            InlineKeyboardButton("⏮", callback_data=f"ADMIN 1|{chat_id}"),
-            InlineKeyboardButton("⏸", callback_data=f"pausevc {chat_id}"),
-            InlineKeyboardButton("⏭", callback_data=f"ADMIN 2|{chat_id}"),
-            InlineKeyboardButton("⏹", callback_data=f"stopvc {chat_id}"),
-        ],
-        [
-            InlineKeyboardButton("✅ Listeye Ekle", callback_data=f"add_playlist {videoid}"),
-            InlineKeyboardButton("🔮 Kontrol Paneli", callback_data=f"PanelMarkup None|{chat_id}"),
-        ],
-    ]
-    return buttons
-
-    total_sec = time_to_sec(dur)
-    if total_sec == 0:
-        total_sec = 1
-
-    x, y = str(round(played_sec / total_sec, 1)).split(".")
-    pos = int(y)
-
-    line = "─"
-    circle = "●"
-
-    bar = line * (pos - 1)
-    bar += circle
-    bar += line * (10 - len(bar))
-
-    buttons = [
-        [
-            InlineKeyboardButton("▶️", callback_data=f"resumevc {chat_id}"),
-            InlineKeyboardButton("⏸️", callback_data=f"pausevc {chat_id}"),
-            InlineKeyboardButton("⏭️", callback_data=f"skipvc {chat_id}"),
-            InlineKeyboardButton("⏹️", callback_data=f"stopvc {chat_id}"),
-        ],
-        [
-            InlineKeyboardButton(
-                text="🔮 𝙆𝙐𝙈𝙎𝘼𝙇 𝘽𝙊𝙏𝙎 🔮",
-                url="https://t.me/the_team_kumsal"
-            )
-        ],
-        [
-            InlineKeyboardButton(
-                text=_["PL_B_2"],
-                callback_data=f"add_playlist {videoid}",
-            ),
-            InlineKeyboardButton(
-                text=_["PL_B_3"],
-                callback_data=f"PanelMarkup None|{chat_id}",
-            ),
-        ],
-    ]
-    return buttons
-
-
+# 🔹 Basit zaman dönüştürücü
 def time_to_sec(time_str):
     parts = list(map(int, time_str.split(":")))
     return parts[0] * 60 + parts[1] if len(parts) == 2 else 0
 
-def telegram_markup_timer(_, chat_id, played, dur, videoid):
+
+# ───────────────────────────────
+# 🎧 Stream oynatma (YouTube vb.)
+# ───────────────────────────────
+def stream_markup_timer(_, videoid, chat_id, played, dur):
     played_sec = time_to_sec(played)
-    total_sec = time_to_sec(dur)
-    if total_sec == 0:
-        total_sec = 1
+    total_sec = time_to_sec(dur) or 1
     ratio = played_sec / total_sec
     pos = int(ratio * 8)
 
     bar_symbols = ["➖"] * 8
-    if pos >= len(bar_symbols):
-        pos = len(bar_symbols) - 1
+    pos = min(pos, len(bar_symbols) - 1)
     bar_symbols[pos] = "🔘"
     bar = "".join(bar_symbols)
 
     buttons = [
+        [InlineKeyboardButton("🩵 Mavi Duyuru", url="https://t.me/MaviDuyuru")],
+        [InlineKeyboardButton(f"{played} ⟪ {bar} ⟫ {dur}", callback_data="nonclickable")],
         [
-            InlineKeyboardButton("🚀 Kumsal Bots 🚀", url="https://t.me/the_team_kumsal")
-        ],
-        [
-            InlineKeyboardButton(f"{played} ⟪ {bar} ⟫ {dur}", callback_data="nonclickable")
-        ],
-        [
-            InlineKeyboardButton("[⏮]", callback_data=f"ADMIN 1|{chat_id}"),
-            InlineKeyboardButton("[⏸]", callback_data=f"pausevc {chat_id}"),
-            InlineKeyboardButton("[▶️]", callback_data=f"resumevc {chat_id}"),
-            InlineKeyboardButton("[⏭]", callback_data=f"ADMIN 2|{chat_id}"),
-            InlineKeyboardButton("[⏹] Bitir", callback_data=f"stopvc {chat_id}"),
+            InlineKeyboardButton("⏮", callback_data=f"ADMIN_1|{chat_id}"),
+            InlineKeyboardButton("⏸", callback_data=f"pausevc|{chat_id}"),
+            InlineKeyboardButton("▶️", callback_data=f"resumevc|{chat_id}"),
+            InlineKeyboardButton("⏭", callback_data=f"ADMIN_2|{chat_id}"),
+            InlineKeyboardButton("⏹", callback_data=f"stopvc|{chat_id}"),
         ],
         [
             InlineKeyboardButton("✅ Listeye Ekle", callback_data=f"add_playlist {videoid}"),
@@ -136,32 +55,47 @@ def telegram_markup_timer(_, chat_id, played, dur, videoid):
     return buttons
 
 
+# ───────────────────────────────
+# 🌀 Telegram stream oynatma
+# ───────────────────────────────
+def telegram_markup_timer(_, chat_id, played, dur, videoid):
+    played_sec = time_to_sec(played)
+    total_sec = time_to_sec(dur) or 1
+    ratio = played_sec / total_sec
+    pos = int(ratio * 8)
 
-# Rest of the functions remain the same...
+    bar_symbols = ["➖"] * 8
+    pos = min(pos, len(bar_symbols) - 1)
+    bar_symbols[pos] = "🔘"
+    bar = "".join(bar_symbols)
+
+    buttons = [
+        [InlineKeyboardButton("🩵 Mavi Duyuru", url="https://t.me/MaviDuyuru")],
+        [InlineKeyboardButton(f"{played} ⟪ {bar} ⟫ {dur}", callback_data="nonclickable")],
+        [
+            InlineKeyboardButton("⏮", callback_data=f"ADMIN_1|{chat_id}"),
+            InlineKeyboardButton("⏸", callback_data=f"pausevc|{chat_id}"),
+            InlineKeyboardButton("▶️", callback_data=f"resumevc|{chat_id}"),
+            InlineKeyboardButton("⏭", callback_data=f"ADMIN_2|{chat_id}"),
+            InlineKeyboardButton("⏹", callback_data=f"stopvc|{chat_id}"),
+        ],
+        [
+            InlineKeyboardButton("✅ Listeye Ekle", callback_data=f"add_playlist {videoid}"),
+            InlineKeyboardButton("🔮 Kontrol Paneli", callback_data=f"PanelMarkup None|{chat_id}"),
+        ],
+    ]
+    return buttons
 
 
-
-## Inline without Timer Bar
-
-
+# ───────────────────────────────
+# Inline without Timer Bar
+# ───────────────────────────────
 def stream_markup(_, videoid, chat_id):
     buttons = [
+        [InlineKeyboardButton("🩵 Mavi Duyuru", url="https://t.me/MaviDuyuru")],
         [
-            InlineKeyboardButton(
-                text=f"𝙆𝙐𝙈𝙎𝘼𝙇 𝘽𝙊𝙏𝙎", 
-                url=f"https://t.me/the_team_kumsal"
-            )
-        ],
-
-        [
-            InlineKeyboardButton(
-                text=_["PL_B_2"],
-                callback_data=f"add_playlist {videoid}",
-            ),
-            InlineKeyboardButton(
-                text=_["PL_B_3"],
-                callback_data=f"PanelMarkup None|{chat_id}",
-            ),
+            InlineKeyboardButton(text=_["PL_B_2"], callback_data=f"add_playlist {videoid}"),
+            InlineKeyboardButton(text=_["PL_B_3"], callback_data=f"PanelMarkup None|{chat_id}"),
         ],
     ]
     return buttons
@@ -170,43 +104,69 @@ def stream_markup(_, videoid, chat_id):
 def telegram_markup(_, chat_id):
     buttons = [
         [
+            InlineKeyboardButton(text=_["PL_B_3"], callback_data=f"PanelMarkup None|{chat_id}"),
+            InlineKeyboardButton(text=_["CLOSEMENU_BUTTON"], callback_data="close"),
+        ],
+    ]
+    return buttons
+
+
+# ───────────────────────────────
+# 🔍 Arama / Track seçimi
+# ───────────────────────────────
+def track_markup(_, videoid, user_id, channel, fplay):
+    buttons = [
+        [InlineKeyboardButton("🩵 Mavi Duyuru", url="https://t.me/MaviDuyuru")],
+        [
             InlineKeyboardButton(
-                text=_["PL_B_3"],
-                callback_data=f"PanelMarkup None|{chat_id}",
+                text=_["P_B_1"], callback_data=f"MusicStream {videoid}|{user_id}|a|{channel}|{fplay}"
             ),
             InlineKeyboardButton(
-                text=_["CLOSEMENU_BUTTON"], callback_data="close"
+                text=_["P_B_2"], callback_data=f"MusicStream {videoid}|{user_id}|v|{channel}|{fplay}"
             ),
         ],
     ]
     return buttons
 
 
-## Search Query Inline
-
-
-def track_markup(_, videoid, user_id, channel, fplay):
+# ───────────────────────────────
+# 📜 Playlist Markup
+# ───────────────────────────────
+def playlist_markup(_, videoid, user_id, ptype, channel, fplay):
     buttons = [
-        [
-            InlineKeyboardButton(
-                text=f"𝙆𝙐𝙈𝙎𝘼𝙇 𝘽𝙊𝙏𝙎", 
-                url=f"https://t.me/the_team_kumsal"
-            )
-        ],
-
+        [InlineKeyboardButton("🩵 Mavi Duyuru", url="https://t.me/MaviDuyuru")],
         [
             InlineKeyboardButton(
                 text=_["P_B_1"],
-                callback_data=f"MusicStream {videoid}|{user_id}|a|{channel}|{fplay}",
+                callback_data=f"ArchMusicPlaylists {videoid}|{user_id}|{ptype}|a|{channel}|{fplay}",
             ),
             InlineKeyboardButton(
                 text=_["P_B_2"],
-                callback_data=f"MusicStream {videoid}|{user_id}|v|{channel}|{fplay}",
+                callback_data=f"ArchMusicPlaylists {videoid}|{user_id}|{ptype}|v|{channel}|{fplay}",
             ),
         ],
     ]
     return buttons
 
+
+# ───────────────────────────────
+# 📺 Canlı Yayın Menüsü
+# ───────────────────────────────
+def livestream_markup(_, videoid, user_id, mode, channel, fplay):
+    buttons = [
+        [
+            InlineKeyboardButton(
+                text=_["P_B_3"],
+                callback_data=f"LiveStream {videoid}|{user_id}|{mode}|{channel}|{fplay}",
+            ),
+            InlineKeyboardButton(
+                text=_["CLOSEMENU_BUTTON"],
+                callback_data=f"forceclose {videoid}|{user_id}",
+            ),
+        ],
+        [InlineKeyboardButton("🩵 Mavi Duyuru", url="https://t.me/MaviDuyuru")],
+    ]
+    return buttons
 
 def playlist_markup(_, videoid, user_id, ptype, channel, fplay):
     buttons = [
