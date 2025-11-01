@@ -36,43 +36,40 @@ def progress_bar(played, total):
 # ───────────────────────────────
 def stream_markup_timer(_, videoid, chat_id, played, dur):
     buttons = [
-        [InlineKeyboardButton(text=progress_bar(played, dur), callback_data="nonclickable")],
-        [
-            InlineKeyboardButton("⏮", callback_data=f"ADMIN 1|{chat_id}"),
-            InlineKeyboardButton("⏸", callback_data=f"pausevc {chat_id}"),
-            InlineKeyboardButton("▶️", callback_data=f"resumevc {chat_id}"),
-            InlineKeyboardButton("⏭", callback_data=f"ADMIN 2|{chat_id}"),
-            InlineKeyboardButton("⏹", callback_data=f"stopvc {chat_id}"),
-        ],
-        [
-            InlineKeyboardButton("🗑️ 𝗞𝗮𝗽𝗮𝘁", callback_data="close"),
-            InlineKeyboardButton("🩵 𝗞𝗮𝗻𝗮𝗹", url="https://t.me/maviduyuru"
-          ),
-       ]
-    ]
-    return buttons
-
+    [InlineKeyboardButton(text=progress_bar(played, dur), callback_data="nonclickable")],
+    [
+        InlineKeyboardButton("⏮", callback_data=f"ADMIN 1|{chat_id}"),
+        InlineKeyboardButton("⏸", callback_data=f"pausevc {chat_id}"),
+        InlineKeyboardButton("▶️", callback_data=f"resumevc {chat_id}"),
+        InlineKeyboardButton("⏭", callback_data=f"ADMIN 2|{chat_id}"),
+        InlineKeyboardButton("⏹", callback_data=f"stopvc {chat_id}"),
+    ],
+    [
+        InlineKeyboardButton("🗑️ 𝗞𝗮𝗽𝗮𝘁", callback_data="close"),
+        InlineKeyboardButton("🩵 𝗞𝗮𝗻𝗮𝗹", url="https://t.me/maviduyuru"),
+    ],
+]
+return buttons
 
 # ───────────────────────────────
 # 🌀 Telegram stream oynatma
 # ───────────────────────────────
 def telegram_markup_timer(_, chat_id, played, dur, videoid):
     buttons = [
-        [InlineKeyboardButton("🚀  ᴍᴀᴠɪ ᴅᴜʏᴜʀᴜ 🚀", url="https://t.me/the_team_kumsal")],
-        [InlineKeyboardButton(progress_bar(played, dur), callback_data="nonclickable")],
-        [
-            InlineKeyboardButton("⏮", callback_data=f"ADMIN 1|{chat_id}"),
-            InlineKeyboardButton("⏸", callback_data=f"pausevc {chat_id}"),
-            InlineKeyboardButton("▶️", callback_data=f"resumevc {chat_id}"),
-            InlineKeyboardButton("⏭", callback_data=f"ADMIN 2|{chat_id}"),
-            InlineKeyboardButton("⏹", callback_data=f"stopvc {chat_id}"),
-        ],
-        [
-            InlineKeyboardButton("🗑️ 𝗞𝗮𝗽𝗮𝘁", callback_data="close"),
-            InlineKeyboardButton("✨ Kontrol Paneli", callback_data=f"PanelMarkup None|{chat_id}"),
-        ],
-    ]
-    return buttons
+    [InlineKeyboardButton(text=progress_bar(played, dur), callback_data="nonclickable")],
+    [
+        InlineKeyboardButton("⏮", callback_data=f"ADMIN 1|{chat_id}"),
+        InlineKeyboardButton("⏸", callback_data=f"pausevc {chat_id}"),
+        InlineKeyboardButton("▶️", callback_data=f"resumevc {chat_id}"),
+        InlineKeyboardButton("⏭", callback_data=f"ADMIN 2|{chat_id}"),
+        InlineKeyboardButton("⏹", callback_data=f"stopvc {chat_id}"),
+    ],
+    [
+        InlineKeyboardButton("🗑️ 𝗞𝗮𝗽𝗮𝘁", callback_data="close"),
+        InlineKeyboardButton("🩵 𝗞𝗮𝗻𝗮𝗹", url="https://t.me/maviduyuru"),
+    ],
+]
+return buttons
 
 
 # ───────────────────────────────
