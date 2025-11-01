@@ -369,49 +369,29 @@ def telegram_markup_timer(_, chat_id, played, dur, videoid):
     buttons = [
         [
             InlineKeyboardButton(
-                text=f"𝙆𝙐𝙈𝙎𝘼𝙇 𝘽𝙊𝙏𝙎 ", 
-                url=f"https://t.me/the_team_kumsal"
-            )
-        ],
-
-        [
-            InlineKeyboardButton(
-                text=_["PL_B_2"],
-                callback_data=f"add_playlist {videoid}",
+                text="🩵 Mavi Duyuru",
+                url="https://t.me/MaviDuyuru"
             ),
             InlineKeyboardButton(
-                text=_["PL_B_3"],
-                callback_data=f"PanelMarkup None|{chat_id}",
+                text="🗑️ Kapat",
+                callback_data="close"
             ),
         ],
     ]
     return buttons
 
 
-# Rest of the functions remain the same...
-
-
-
-## Inline without Timer Bar
-
 
 def stream_markup(_, videoid, chat_id):
     buttons = [
         [
             InlineKeyboardButton(
-                text=f"𝙆𝙐𝙈𝙎𝘼𝙇 𝘽𝙊𝙏𝙎", 
-                url=f"https://t.me/the_team_kumsal"
-            )
-        ],
-
-        [
-            InlineKeyboardButton(
-                text=_["PL_B_2"],
-                callback_data=f"add_playlist {videoid}",
+                text="🩵 𝗞𝗮𝗻𝗮𝗹",
+                url="https://t.me/MaviDuyuru"
             ),
             InlineKeyboardButton(
-                text=_["PL_B_3"],
-                callback_data=f"PanelMarkup None|{chat_id}",
+                text="🗑️ 𝗞𝗮𝗽𝗮𝘁",
+                callback_data="close"
             ),
         ],
     ]
