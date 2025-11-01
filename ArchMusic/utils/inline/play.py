@@ -27,15 +27,12 @@ def stream_markup(_, videoid, chat_id):
     return [
         [InlineKeyboardButton(text=bar, callback_data="bar_locked")],
         [
-            InlineKeyboardButton("🔼 Başlat", callback_data=f"stream_play {videoid}|{chat_id}"),
-            InlineKeyboardButton("📺 Görsel", callback_data=f"stream_video {videoid}|{chat_id}")
+            InlineKeyboardButton("°🔼° Başlat", callback_data=f"stream_play {videoid}|{chat_id}"),
+            InlineKeyboardButton("°⏮️° Geri", callback_data=f"ADMIN Back|{chat_id}"),
+            InlineKeyboardButton("°⏭️° İleri", callback_data=f"ADMIN Forward|{chat_id}")
         ],
         [
-            InlineKeyboardButton("⏮️ Geri", callback_data=f"ADMIN Back|{chat_id}"),
-            InlineKeyboardButton("⏭️ İleri", callback_data=f"ADMIN Forward|{chat_id}")
-        ],
-        [
-            InlineKeyboardButton("💠 Mavi", url="https://t.me/MaviDuyuru"),
+            InlineKeyboardButton(" Mavi", url="https://t.me/MaviDuyuru"),
             InlineKeyboardButton("❌ Kapat", callback_data=f"forceclose {videoid}|{chat_id}")
         ],
     ]
