@@ -1,6 +1,9 @@
+
 import asyncio
+import random  # <-- YENİ EKLENDİ
 from pyrogram import filters
 from pyrogram.enums import ChatType, ParseMode
+from pyrogram.errors import MessageNotModified  # <-- YENİ EKLENDİ
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from youtubesearchpython.__future__ import VideosSearch
 
@@ -27,30 +30,67 @@ from ArchMusic.utils.inline import help_pannel, private_panel, start_pannel
 loop = asyncio.get_running_loop()
 
 
-# ===================== SHOW LOADING ANIMASYONU (OPTİMİZE) =====================
+# ===================== GÜZEL YÜKLENİYOR (Siber Glitch) =====================
 async def show_loading(message: Message):
-    frames = ["⚡🤖 Başlatılıyor…", "🔋💻 Modüller yükleniyor…", "💫🔌 Bağlantılar kuruluyor…", "⚡🤖 Hazır! ✅"]
-    loading = await message.reply_text(frames[0])
+    """
+    Bir metni "deşifre" ediyormuş gibi "glitch" efekti uygulayan animasyon.
+    """
     
-    for frame in frames[1:]:
-        await asyncio.sleep(0.5)
-        try:
-            if loading.text != frame:
-                await loading.edit(frame)
-        except:
-            pass
+    # "Glitch" efekti için kullanılacak karakterler
+    flicker_chars = "█▓▒░_/\@#%&?01*ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    
+    # Deşifre edilecek adımlar
+    status_messages = [
+        "BAŞLATILIYOR...",
+        "MODÜLLER YÜKLENİYOR...",
+        "BAĞLANTI KURULUYOR...",
+        "SİSTEM AKTİF!"
+    ]
+    
+    loading_message = None
+    
+    try:
+        # İlk boş mesajı gönder
+        loading_message = await message.reply_text("```[ ... ]```")
+        
+        # Her durum mesajı için (Dış döngü)
+        for target_text in status_messages:
+            current_text = list(" " * len(target_text))
+            
+            # "Deşifre" animasyonu (İç döngü)
+            # Her harfi tek tek yerine koy
+            for i in range(len(target_text)):
+                current_text[i] = target_text[i] # i'inci harfi sabitle
+                
+                # Sabitlenmemiş diğer harfleri "karıştır"
+                for j in range(i + 1, len(target_text)):
+                    current_text[j] = random.choice(flicker_chars)
+                
+                new_display_text = f"```[ {''.join(current_text)} ]```"
+                
+                try:
+                    if loading_message.text != new_display_text:
+                        await loading_message.edit(new_display_text)
+                except MessageNotModified:
+                    pass
+                
+                await asyncio.sleep(0.04) # Deşifre hızı (çok hızlı olmalı)
+            
+            # Kelimenin tamamı deşifre oldu, kısa bir süre bekle
+            final_display_text = f"```[ {target_text} ]```"
+            if loading_message.text != final_display_text:
+                await loading_message.edit(final_display_text)
+            
+            await asyncio.sleep(0.5) # Bir sonraki adıma geçmeden önce durakla
 
-    pulse_frames = ["⚡🤖 Hazır! ✅", "💫🔋 Hazır! ✅"]
-    for _ in range(1):
-        for frame in pulse_frames:
-            await asyncio.sleep(0.3)
-            try:
-                if loading.text != frame:
-                    await loading.edit(frame)
-            except:
-                pass
+        # Bitiş
+        await loading_message.edit("```[ ✅ SİSTEM AKTİF! ]```")
 
-    return loading
+    except Exception as e:
+        print(f"Hata (show_loading): {e}")
+        pass
+
+    return loading_message
 
 
 # ===================== START KOMUTU PARAMETRELERİ =====================
@@ -107,10 +147,11 @@ async def start_comm(client, message: Message, _):
 
     params = message.text.split(None, 1)
     if len(params) > 1:
-        await loading.delete()
+        await loading.delete() # Animasyon mesajını siliyoruz
         return await handle_start_params(client, message, params[1], _)
 
-    await loading.delete()
+    # Animasyon mesajını siliyoruz
+    await loading.delete() 
     try:
         OWNER = OWNER_ID[0] if await app.resolve_peer(OWNER_ID[0]) else None
     except:
