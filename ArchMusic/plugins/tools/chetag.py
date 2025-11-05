@@ -1,3 +1,4 @@
+
 import os
 import asyncio
 import random
@@ -449,7 +450,7 @@ async def chat_mode_callback(bot: app, cb: CallbackQuery):
             chatMode.remove(chat_id)
             await cb.edit_message_text("Sohbet modu kapatıldı.")
 
-    await cb.answer()  
+    await cb.answer()   
 
 
 @app.on_message(filters.group & filters.text & ~filters.command("chatmode"), group=10)
@@ -547,7 +548,7 @@ async def chatModeHandler(bot: app, msg: Message):
     elif kontrol(["tm"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(tm)
         await asyncio.sleep(0.06)   
-                
+                    
     elif kontrol(["nerdesin"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(nerdesin)
         await asyncio.sleep(0.06)   
@@ -574,7 +575,8 @@ async def chatModeHandler(bot: app, msg: Message):
             
     elif kontrol(["konuşalım","konusalım"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(konuşalım)
-        await asyncio.sleep(0.gofem)   
+        # --- HATA BURADAYDI ---
+        await asyncio.sleep(0.06)   # 0.gofem -> 0.06 olarak düzeltildi
             
     elif kontrol(["saat"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(saat)
@@ -595,7 +597,7 @@ async def chatModeHandler(bot: app, msg: Message):
     elif kontrol(["günler"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(günler)
         await asyncio.sleep(0.06)   
-                
+                    
     elif kontrol(["tanımıyorum"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(tanımıyorum)
         await asyncio.sleep(0.06)   
@@ -619,7 +621,7 @@ async def chatModeHandler(bot: app, msg: Message):
     elif kontrol(["amk","aq","mg","mk"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(amk)
         await asyncio.sleep(0.06)   
-                
+                    
     elif kontrol(["yoruldum"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(yoruldum)
         await asyncio.sleep(0.06)   
@@ -643,7 +645,7 @@ async def chatModeHandler(bot: app, msg: Message):
     elif kontrol(["uyu"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(uyu)
         await asyncio.sleep(0.06)   
-                
+                    
     elif kontrol(["nereye","nere"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(nereye)
         await asyncio.sleep(0.06)   
@@ -667,7 +669,7 @@ async def chatModeHandler(bot: app, msg: Message):
     elif kontrol(["takım"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(takım)
         await asyncio.sleep(0.06)   
-                
+                    
     elif kontrol(["benimle","bnmle"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(benimle)
         await asyncio.sleep(0.06)   
@@ -691,7 +693,7 @@ async def chatModeHandler(bot: app, msg: Message):
     elif kontrol(["bilmiyorum","bilmiyom","bilmiyos"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(bilmiyorum)
         await asyncio.sleep(0.06)   
-                
+                    
     elif kontrol(["küsme"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(küsme)
         await asyncio.sleep(0.06)   
@@ -715,9 +717,9 @@ async def chatModeHandler(bot: app, msg: Message):
     elif kontrol(["olmas","olmaz"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(olmaz)
         await asyncio.sleep(0.06)   
-                
+                    
     elif kontrol(["nasıl"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
-        reply = random.choice(nasıl)
+        reply = random.choice(nasıl)o
         await asyncio.sleep(0.06)   
             
     elif kontrol(["hayatım"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
@@ -739,7 +741,7 @@ async def chatModeHandler(bot: app, msg: Message):
     elif kontrol(["hayırdır"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(hayırdır)
         await asyncio.sleep(0.06)   
-                
+                    
     elif kontrol(["of"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(of)
         await asyncio.sleep(0.06)   
@@ -763,7 +765,7 @@ async def chatModeHandler(bot: app, msg: Message):
     elif kontrol(["evet"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(evet)
         await asyncio.sleep(0.06)   
-                
+                    
     elif kontrol(["hmm","hm","hımm","hmmm"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(hmm)
         await asyncio.sleep(0.06)   
@@ -787,7 +789,7 @@ async def chatModeHandler(bot: app, msg: Message):
     elif kontrol(["ban"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(ban)
         await asyncio.sleep(0.06)   
-                
+                    
     elif kontrol(["sen"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(sen)
         await asyncio.sleep(0.06)   
@@ -811,7 +813,7 @@ async def chatModeHandler(bot: app, msg: Message):
     elif kontrol(["varoş"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(varoş)
         await asyncio.sleep(0.06)   
-                
+                    
     elif kontrol(["arkadaş","arkadas"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(arkadaş)
         await asyncio.sleep(0.06)   
@@ -849,81 +851,81 @@ async def games(c: app, m: Message):
 
     if command == "zar":
         return await c.send_dice(m.chat.id, emoji="🎲",
-                                    reply_markup=InlineKeyboardMarkup(
-                                        [
-                                            [
-                                                InlineKeyboardButton(
-                                                    "Tekrar Oyna ♻️", callback_data="zar"
-                                                ),
-                                            ]
-                                        ]
-                                    )
-                                )
+                                     reply_markup=InlineKeyboardMarkup(
+                                         [
+                                             [
+                                                 InlineKeyboardButton(
+                                                     "Tekrar Oyna ♻️", callback_data="zar"
+                                                 ),
+                                             ]
+                                         ]
+                                     )
+                                 )
 
     elif command == "dart":
         return await c.send_dice(m.chat.id, emoji="🎯",
-                                    reply_markup=InlineKeyboardMarkup(
-                                        [
-                                            [
-                                                InlineKeyboardButton(
-                                                    "Tekrar Oyna ♻️", callback_data="dart"
-                                                ),
-                                            ]
-                                        ]
-                                    )
-                                )
+                                     reply_markup=InlineKeyboardMarkup(
+                                         [
+                                             [
+                                                 InlineKeyboardButton(
+                                                     "Tekrar Oyna ♻️", callback_data="dart"
+                                                 ),
+                                             ]
+                                         ]
+                                     )
+                                 )
 
     elif command == "basket":
         return await c.send_dice(m.chat.id, emoji="🏀",
-                                    reply_markup=InlineKeyboardMarkup(
-                                        [
-                                            [
-                                                InlineKeyboardButton(
-                                                    "Tekrar Oyna ♻️", callback_data="basket"
-                                                ),
-                                            ]
-                                        ]
-                                    )
-                                )
+                                     reply_markup=InlineKeyboardMarkup(
+                                         [
+                                             [
+                                                 InlineKeyboardButton(
+                                                     "Tekrar Oyna ♻️", callback_data="basket"
+                                                 ),
+                                             ]
+                                         ]
+                                     )
+                                 )
 
     elif command == "futbol":
         return await c.send_dice(m.chat.id, emoji="⚽",
-                                    reply_markup=InlineKeyboardMarkup(
-                                        [
-                                            [
-                                                InlineKeyboardButton(
-                                                    "Tekrar Oyna ♻️", callback_data="futbol"
-                                                ),
-                                            ]
-                                        ]
-                                    )
-                                )
+                                     reply_markup=InlineKeyboardMarkup(
+                                         [
+                                             [
+                                                 InlineKeyboardButton(
+                                                     "Tekrar Oyna ♻️", callback_data="futbol"
+                                                 ),
+                                             ]
+                                         ]
+                                     )
+                                 )
 
     elif command == "bowling":
         return await c.send_dice(m.chat.id, emoji="🎳",
-                                    reply_markup=InlineKeyboardMarkup(
-                                        [
-                                            [
-                                                InlineKeyboardButton(
-                                                    "Tekrar Oyna ♻️", callback_data="bowling"
-                                                ),
-                                            ]
-                                        ]
-                                    )
-                                )
+                                     reply_markup=InlineKeyboardMarkup(
+                                         [
+                                             [
+                                                 InlineKeyboardButton(
+                                                     "Tekrar Oyna ♻️", callback_data="bowling"
+                                                 ),
+                                             ]
+                                         ]
+                                     )
+                                 )
 
     elif command == "slot":
         return await c.send_dice(m.chat.id, emoji="🎰",
-                                    reply_markup=InlineKeyboardMarkup(
-                                        [
-                                            [
-                                                InlineKeyboardButton(
-                                                    "Tekrar Oyna ♻️", callback_data="slot"
-                                                ),
-                                            ]
-                                        ]
-                                    )
-                                )
+                                     reply_markup=InlineKeyboardMarkup(
+                                         [
+                                             [
+                                                 InlineKeyboardButton(
+                                                     "Tekrar Oyna ♻️", callback_data="slot"
+                                                 ),
+                                             ]
+                                         ]
+                                     )
+                                 )
 
     elif command == "para":
         return await m.reply(
@@ -952,86 +954,86 @@ async def games(c: app, m: Message):
 @app.on_callback_query(filters.regex("zar"))
 async def zar(client: app, query: CallbackQuery):
     await client.send_dice(query.message.chat.id, emoji="🎲",
-                            reply_markup=InlineKeyboardMarkup(
-                                [
-                                    [
-                                        InlineKeyboardButton(
-                                            "Tekrar Oyna ♻️", callback_data="zar"
-                                        ),
-                                    ]
-                                ]
-                            )
-                        )
+                             reply_markup=InlineKeyboardMarkup(
+                                 [
+                                     [
+                                         InlineKeyboardButton(
+                                             "Tekrar Oyna ♻️", callback_data="zar"
+                                         ),
+                                     ]
+                                 ]
+                             )
+                           )
 
 @app.on_callback_query(filters.regex("dart"))
 async def dart(client: app, query: CallbackQuery):
     await client.send_dice(query.message.chat.id, emoji="🎯",
-                            reply_markup=InlineKeyboardMarkup(
-                                [
-                                    [
-                                        InlineKeyboardButton(
-                                            "Tekrar Oyna ♻️", callback_data="dart"
-                                        ),
-                                    ]
-                                ]
-                            )
-                        )
+                             reply_markup=InlineKeyboardMarkup(
+                                 [
+                                     [
+                                         InlineKeyboardButton(
+                                             "Tekrar Oyna ♻️", callback_data="dart"
+                                         ),
+                                     ]
+                                 ]
+                             )
+                           )
 
 @app.on_callback_query(filters.regex("basket"))
 async def basket(client: app, query: CallbackQuery):
     await client.send_dice(query.message.chat.id, emoji="🏀",
-                            reply_markup=InlineKeyboardMarkup(
-                                [
-                                    [
-                                        InlineKeyboardButton(
-                                            "Tekrar Oyna ♻️", callback_data="basket"
-                                        ),
-                                    ]
-                                ]
-                            )
-                        )
+                             reply_markup=InlineKeyboardMarkup(
+                                 [
+                                     [
+                                         InlineKeyboardButton(
+                                             "Tekrar Oyna ♻️", callback_data="basket"
+                                         ),
+                                     ]
+                                 ]
+                             )
+                           )
 
 @app.on_callback_query(filters.regex("futbol"))
 async def futbol(client: app, query: CallbackQuery):
     await client.send_dice(query.message.chat.id, emoji="⚽",
-                            reply_markup=InlineKeyboardMarkup(
-                                [
-                                    [
-                                        InlineKeyboardButton(
-                                            "Tekrar Oyna ♻️", callback_data="futbol"
-                                        ),
-                                    ]
-                                ]
-                            )
-                        )
+                             reply_markup=InlineKeyboardMarkup(
+                                 [
+                                     [
+                                         InlineKeyboardButton(
+                                             "Tekrar Oyna ♻️", callback_data="futbol"
+                                         ),
+                                     ]
+                                 ]
+                             )
+                           )
 
 @app.on_callback_query(filters.regex("bowling"))
 async def bowling(client: app, query: CallbackQuery):
     await client.send_dice(query.message.chat.id, emoji="🎳",
-                            reply_markup=InlineKeyboardMarkup(
-                                [
-                                    [
-                                        InlineKeyboardButton(
-                                            "Tekrar Oyna ♻️", callback_data="bowling"
-                                        ),
-                                    ]
-                                ]
-                            )
-                        )
+                             reply_markup=InlineKeyboardMarkup(
+                                 [
+                                     [
+                                         InlineKeyboardButton(
+                                             "Tekrar Oyna ♻️", callback_data="bowling"
+                                         ),
+                                     ]
+                                 ]
+                             )
+                           )
 
 @app.on_callback_query(filters.regex("slot"))
 async def slot(client: app, query: CallbackQuery):
     await client.send_dice(query.message.chat.id, emoji="🎰",
-                            reply_markup=InlineKeyboardMarkup(
-                                [
-                                    [
-                                        InlineKeyboardButton(
-                                            "Tekrar Oyna ♻️", callback_data="slot"
-                                        ),
-                                    ]
-                                ]
-                            )
-                        )
+                             reply_markup=InlineKeyboardMarkup(
+                                 [
+                                     [
+                                         InlineKeyboardButton(
+                                             "Tekrar Oyna ♻️", callback_data="slot"
+                                         ),
+                                     ]
+                                 ]
+                             )
+                           )
 
 
 @app.on_message(filters.command(["slap", "sille"]) & filters.group)
