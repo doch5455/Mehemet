@@ -1,4 +1,4 @@
-httpstpsviduyuruviduyuruport re
+import re
 
 import sys
 
@@ -88,7 +88,8 @@ GIT_TOKEN = getenv("GIT_TOKEN", None)
 
 SUPPORT_CHANNEL = getenv(
 
-    "SUPPORT_CHANNEL", "https:"https://t.me/hebunbots21") 
+    "SUPPORT_CHANNEL", "") # Example:- https://t.me/ArchBots
+
 SUPPORT_GROUP = getenv(
 
     "SUPPORT_GROUP", None)  # Example:- https://t.me/ARCH_SUPPORTS
