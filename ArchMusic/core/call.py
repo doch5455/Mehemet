@@ -7,12 +7,12 @@
 # All rights reserved.
 #
 
-# REFAKTÖR NOTU (4. Tur):
-# - HEDEF: Donmayı (lag) azaltmak ve akıcılığı artırmak.
-# - 'safe_get_stream' ve 'seek_stream' fonksiyonları, FFmpeg'e
-#   ek parametreler gönderecek şekilde güncellendi.
-# - "-preset superfast": CPU yükünü azaltır, zayıf sunucularda donmayı önler.
-# - "-reconnect 1 ...": Kaynak linki kesilirse otomatik yeniden bağlanır.
+# REFAKTÖR NOTU (5. Tur):
+# - HEDEF: "Asistan sese çıkmıyor" sorununu teşhis etmek.
+# - 'join_call' fonksiyonuna, PyTgCalls'tan gelebilecek TÜM hataları
+#   yakalayan ve kullanıcıya bildiren bir 'except Exception' bloğu eklendi.
+# - Bu kod, sorunu çözmez; sorunun NE OLDUĞUNU (izin yetersizliği,
+#   geçersiz string session vb.) size söyler.
 
 import asyncio
 from datetime import datetime, timedelta
@@ -64,12 +64,7 @@ async def _clear_(chat_id):
     await remove_active_chat(chat_id)
 
 
-# --- REFAKTÖR 4: Akıcılık (Donma Önleme) Ayarları Eklendi ---
 async def safe_get_stream(link: str, video: Union[bool, str] = None, chat_id: int = None):
-    """
-    Güvenli stream oluşturma.
-    Donmayı önlemek için FFmpeg 'preset' ve 'reconnect' bayrakları eklendi.
-    """
     from ArchMusic import YouTube
     try:
         if not link or not isinstance(link, str):
@@ -78,7 +73,6 @@ async def safe_get_stream(link: str, video: Union[bool, str] = None, chat_id: in
         audio_stream_quality = await get_audio_bitrate(chat_id)
         video_stream_quality = await get_video_bitrate(chat_id)
 
-        # Bu parametreler CPU yükünü azaltır ve ağ hatalarını tolere eder
         ffmpeg_params = (
             "-preset superfast "
             "-reconnect 1 "
@@ -91,13 +85,13 @@ async def safe_get_stream(link: str, video: Union[bool, str] = None, chat_id: in
                 link,
                 audio_parameters=audio_stream_quality,
                 video_parameters=video_stream_quality,
-                additional_ffmpeg_parameters=ffmpeg_params, # EKLENDİ
+                additional_ffmpeg_parameters=ffmpeg_params,
             )
             if video
             else AudioPiped(
                 link, 
                 audio_parameters=audio_stream_quality,
-                additional_ffmpeg_parameters=ffmpeg_params, # EKLENDİ
+                additional_ffmpeg_parameters=ffmpeg_params,
             )
         )
         return stream
@@ -193,7 +187,6 @@ class Call(PyTgCalls):
         self, chat_id: int, link: str, video: Union[bool, str] = None
     ):
         assistant = await group_assistant(self, chat_id)
-        # Değişiklik: 'safe_get_stream' artık donma önleyici ayarları içeriyor
         stream = await safe_get_stream(link, video, chat_id) 
         
         if not stream:
@@ -214,7 +207,6 @@ class Call(PyTgCalls):
             
         await assistant.change_stream(chat_id, stream)
 
-    # --- REFAKTÖR 4: Akıcılık (Donma Önleme) Ayarları Eklendi ---
     async def seek_stream(
         self, chat_id, file_path, to_seek, duration, mode
     ):
@@ -222,7 +214,6 @@ class Call(PyTgCalls):
         audio_stream_quality = await get_audio_bitrate(chat_id)
         video_stream_quality = await get_video_bitrate(chat_id)
         
-        # 'safe_get_stream' ile tutarlı olması için preset'leri buraya da ekliyoruz.
         ffmpeg_params = (
             "-preset superfast "
             f"-ss {to_seek} -to {duration}"
@@ -233,20 +224,19 @@ class Call(PyTgCalls):
                 file_path,
                 audio_parameters=audio_stream_quality,
                 video_parameters=video_stream_quality,
-                additional_ffmpeg_parameters=ffmpeg_params, # GÜNCELLENDİ
+                additional_ffmpeg_parameters=ffmpeg_params,
             )
             if mode == "video"
             else AudioPiped(
                 file_path,
                 audio_parameters=audio_stream_quality,
-                additional_ffmpeg_parameters=ffmpeg_params, # GÜNCELLENDİ
+                additional_ffmpeg_parameters=ffmpeg_params,
             )
         )
         await assistant.change_stream(chat_id, stream)
 
     async def stream_call(self, link):
         assistant = await group_assistant(self, config.LOG_GROUP_ID)
-        # 'safe_get_stream' artık donma önleyici ayarları içeriyor
         stream = await safe_get_stream(link, True, config.LOG_GROUP_ID) 
         if not stream:
             return
@@ -333,7 +323,6 @@ class Call(PyTgCalls):
         _ = get_string(language)
         
         assistant = await group_assistant(self, chat_id)
-        # 'safe_get_stream' artık donma önleyici ayarları içeriyor
         stream = await safe_get_stream(link, video, chat_id) 
         
         if not stream:
@@ -367,6 +356,26 @@ class Call(PyTgCalls):
             await _clear_(chat_id)
             return
             
+        # --- BU BLOK EKLENDİ (TANI İÇİN) ---
+        # PyTgCalls'tan gelebilecek diğer tüm beklenmedik hataları yakala
+        except Exception as e:
+            # Bu hatayı hem loglara hem de kullanıcıya bildir
+            LOGGER(__name__).critical(f"ASİSTAN ARAMAYA KATILAMADI (ChatID: {chat_id}): {type(e).__name__} - {e}")
+            try:
+                # Hatayı doğrudan sohbete gönder
+                await app.send_message(
+                    original_chat_id,
+                    "**❌ Asistan Aramaya Katılamadı**\n\n"
+                    f"**Hata Türü:** `{type(e).__name__}`\n"
+                    f"**Detay:** `{e}`\n\n"
+                    "Lütfen **string session'ınızın güncel olduğundan** ve asistanın "
+                    "grupta/sesli sohbette **konuşma izni** olduğundan emin olun."
+                )
+            except Exception as e2:
+                LOGGER(__name__).error(f"Hata mesajı gönderilemedi: {e2}")
+            return # Fonksiyonu sonlandır, aşağısı çalışmasın
+        # --- GÜNCELLEME SONU ---
+            
         await add_active_chat(chat_id)
         await mute_off(chat_id)
         await music_on(chat_id)
@@ -390,7 +399,6 @@ class Call(PyTgCalls):
             LOGGER(__name__).warning(f"Stream kaynağı alınamadı: {item['title']}. Atlanıyor...")
             return await self.change_stream(client, chat_id)
 
-        # 'safe_get_stream' artık donma önleyici ayarları içeriyor
         stream = await safe_get_stream(stream_source, streamtype, chat_id) 
         if not stream:
             await app.send_message(original_chat_id, _["call_stream_err"])
