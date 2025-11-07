@@ -1,4 +1,3 @@
-
 import os
 import asyncio
 import random
@@ -575,7 +574,9 @@ async def chatModeHandler(bot: app, msg: Message):
             
     elif kontrol(["konuşalım","konusalım"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(konuşalım)
-        # --- HATA BURADAYDI ---
+        # --- HATA DÜZELTİLDİ ---
+        # Orijinal satır 'await asyncio.sleep(0.gofem)' bir SyntaxError'a neden oluyordu.
+        # Bu hata, tüm eklentinin yüklenmesini engelliyor ve /durdur dahil hiçbir komutun çalışmamasına yol açıyordu.
         await asyncio.sleep(0.06)   # 0.gofem -> 0.06 olarak düzeltildi
             
     elif kontrol(["saat"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
