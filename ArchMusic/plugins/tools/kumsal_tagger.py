@@ -212,62 +212,6 @@ async def gecetag(app, message):
 
 #--------------------------------------------------------------------------------------
 
-# Dosyadan mesajları oku
-def load_kurttag_messages():
-    with open("kurttag_messages.txt", "r", encoding="utf-8") as f:
-        messages = [line.strip() for line in f if line.strip()]
-    return messages
-
-kurttag_messages = load_kurttag_messages()
-
-@app.on_message(filters.command("kurttag") & filters.group)
-async def kurttag(app, message):
-    admins = []
-    async for member in app.get_chat_members(message.chat.id, filter=ChatMembersFilter.ADMINISTRATORS):
-        admins.append(member.user.id)
-
-    if message.from_user.id not in admins:
-        await message.reply("❗ Bu komutu kullanmak için yönetici olmalısınız!")
-        return
-
-    chat = message.chat
-    total_members = 0
-    async for member in app.get_chat_members(chat.id):
-        if not member.user.is_bot and not member.user.is_deleted:
-            total_members += 1
-
-    start_msg = await message.reply(f"🐺 Kurt mesajları başlıyor! Toplam: {total_members} üye")
-    kumsal_tagger[chat.id] = start_msg.id
-
-    skipped_bots = 0
-    skipped_deleted = 0
-    total_tagged = 0
-
-    async for member in app.get_chat_members(chat.id):
-        u = member.user
-        if u.is_bot:
-            skipped_bots += 1
-            continue
-        if u.is_deleted:
-            skipped_deleted += 1
-            continue
-
-        if chat.id not in kumsal_tagger or kumsal_tagger[chat.id] != start_msg.id:
-            return
-
-        total_tagged += 1
-        text = random.choice(kurttag_messages).format(user=f"[{u.first_name}](tg://user?id={u.id})")
-        await app.send_message(chat.id, text)
-        await asyncio.sleep(3)
-
-    await app.send_message(chat.id, f"""
-Kurt mesajları tamamlandı! ✅
-
-👥 Etiketlenen Üye: {total_tagged}
-🤖 Atlanılan Bot: {skipped_bots}
-💣 Atlanılan Silinen Hesap: {skipped_deleted}
-""")
-    
 
     
 
