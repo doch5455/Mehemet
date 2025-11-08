@@ -212,11 +212,16 @@ async def gecetag(app, message):
 
 #--------------------------------------------------------------------------------------
 
+# Dosyadan mesajları oku
+def load_kurttag_messages():
+    with open("kurttag_messages.txt", "r", encoding="utf-8") as f:
+        messages = [line.strip() for line in f if line.strip()]
+    return messages
+
+kurttag_messages = load_kurttag_messages()
+
 @app.on_message(filters.command("kurttag") & filters.group)
 async def kurttag(app, message):
-    """
-    ➪ /kurttag - sɪᴢɪɴ ɪᴄ‌ɪɴ ᴋᴜʀᴛ ᴏʏᴜɴᴜɴᴀ ᴅᴀᴠᴇᴛ ᴇᴅᴇʀ..
-    """
     admins = []
     async for member in app.get_chat_members(message.chat.id, filter=ChatMembersFilter.ADMINISTRATORS):
         admins.append(member.user.id)
@@ -225,66 +230,44 @@ async def kurttag(app, message):
         await message.reply("❗ Bu komutu kullanmak için yönetici olmalısınız!")
         return
 
+    chat = message.chat
     total_members = 0
-    async for member in app.get_chat_members(message.chat.id):
-        user = member.user
-        if not user.is_bot and not user.is_deleted:
+    async for member in app.get_chat_members(chat.id):
+        if not member.user.is_bot and not member.user.is_deleted:
             total_members += 1
 
-    user = message.from_user
-    chat = message.chat
+    start_msg = await message.reply(f"🐺 Kurt mesajları başlıyor! Toplam: {total_members} üye")
+    kumsal_tagger[chat.id] = start_msg.id
 
-    await app.send_message(LOG_GROUP_ID, f"""
-Etiket işlemi bildirimi.
-
-Kullanan : {user.mention} [`{user.id}`]
-Etiket Tipi : 🐺 Tekli Kurt Tag
-
-Grup : {chat.title}
-Grup İD : `{chat.id}`
-
-Sebep : {message.text}
-""")
-
-    start_msg = await message.reply(f"""
-**🐺 ᴋᴜʀᴛ ᴏʏᴜɴᴜ ʙᴀşʟɪʏᴏʀ! ʜᴀʏᴅɪ ɢᴇʟ! 🌕🔥**
-
-**Botlar ve silinen hesaplar atlanacak.**
-👥 __Toplam Etiketlenecek Üye Sayısı: {total_members}__
-""")
-
-    kumsal_tagger[message.chat.id] = start_msg.id
     skipped_bots = 0
     skipped_deleted = 0
     total_tagged = 0
 
-    async for member in app.get_chat_members(message.chat.id):
-        user = member.user
-        if user.is_bot:
+    async for member in app.get_chat_members(chat.id):
+        u = member.user
+        if u.is_bot:
             skipped_bots += 1
             continue
-        if user.is_deleted:
+        if u.is_deleted:
             skipped_deleted += 1
             continue
 
-        total_tagged += 1
-
-        # Durdurulma kontrolü
-        if message.chat.id not in kumsal_tagger or kumsal_tagger[message.chat.id] != start_msg.id:
+        if chat.id not in kumsal_tagger or kumsal_tagger[chat.id] != start_msg.id:
             return
 
-        text = f"🐺 [{user.first_name}](tg://user?id={user.id}) ᴋᴜʀᴛ ᴏʏᴜɴᴜ ʙᴀşʟɪʏᴏʀ! ʜᴀʏᴅɪ ɢᴇʟ! 🌕🔥"
-        await app.send_message(message.chat.id, text)
-        await asyncio.sleep(3)  # Her kullanıcı arasında 3 saniye bekleme
+        total_tagged += 1
+        text = random.choice(kurttag_messages).format(user=f"[{u.first_name}](tg://user?id={u.id})")
+        await app.send_message(chat.id, text)
+        await asyncio.sleep(3)
 
-    await app.send_message(message.chat.id, f"""
-**🌕 ᴋᴜʀᴛ ᴏʏᴜɴᴜ sᴏɴʟᴀɴᴅɪ!** ✅
+    await app.send_message(chat.id, f"""
+Kurt mesajları tamamlandı! ✅
 
-👥 __Etiketlenen Üye: {total_tagged}__
-🤖 __Atlanılan Bot: {skipped_bots}__
-💣 __Atlanılan Silinen Hesap: {skipped_deleted}__
+👥 Etiketlenen Üye: {total_tagged}
+🤖 Atlanılan Bot: {skipped_bots}
+💣 Atlanılan Silinen Hesap: {skipped_deleted}
 """)
-
+    
 
     
 
