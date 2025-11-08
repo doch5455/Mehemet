@@ -162,6 +162,50 @@ async def guntag(app, message):
 
 
 
+@app.on_message(filters.command("gecetag") & filters.group)
+async def gecetag(app, message):
+    # Sadece yöneticiler kullanabilir
+    admins = []
+    async for member in app.get_chat_members(message.chat.id, filter=ChatMembersFilter.ADMINISTRATORS):
+        admins.append(member.user.id)
+
+    if message.from_user.id not in admins:
+        await message.reply("❗ Bu komutu kullanmak için yönetici olmalısınız!")
+        return
+
+    user = message.from_user
+    chat = message.chat
+
+    start_msg = await message.reply("🌙 **İyi geceler mesajları başlıyor!** 😴")
+    kumsal_tagger[chat.id] = start_msg.id
+
+    skipped_bots = 0
+    skipped_deleted = 0
+    total_tagged = 0
+
+    async for member in app.get_chat_members(chat.id):
+        u = member.user
+        if u.is_bot:
+            skipped_bots += 1
+            continue
+        if u.is_deleted:
+            skipped_deleted += 1
+            continue
+
+        total_tagged += 1
+
+        # Tekli mesaj
+        text = random.choice(gece_messages).format(user=f"[{u.first_name}](tg://user?id={u.id})")
+        await app.send_message(chat.id, text)
+        await asyncio.sleep(2)  # Her kullanıcıya 2 saniye arayla
+
+    await app.send_message(chat.id, f"""
+**İyi geceler mesajları tamamlandı!** ✅
+
+👥 __Mesaj gönderilen üye: {total_tagged}__
+🤖 __Atlanılan Bot: {skipped_bots}__
+💣 __Atlanılan Silinen Hesap: {skipped_deleted}__
+""")
 
 
 #--------------------------------------------------------------------------------------
