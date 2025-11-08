@@ -138,6 +138,13 @@ async def guntag(app, message):
     total_tagged = 0
 
     async for member in app.get_chat_members(message.chat.id):
+        # ---- DÜZELTME ----
+        # Etiketlemenin iptal edilip edilmediğini kontrol et
+        if message.chat.id not in kumsal_tagger or kumsal_tagger[message.chat.id] != start_msg.id:
+            # await app.send_message(message.chat.id, "⛔ __Günaydın etiketleme işlemi durduruldu!__") # İsteğe bağlı: Durdurulduğuna dair mesaj
+            return  # İptal edildiyse fonksiyondan çık
+        # ---- DÜZELTME SONU ----
+
         u = member.user
         if u.is_bot:
             skipped_bots += 1
@@ -184,6 +191,11 @@ async def gecetag(app, message):
     total_tagged = 0
 
     async for member in app.get_chat_members(chat.id):
+        # ---- DÜZELTME ----
+        if chat.id not in kumsal_tagger or kumsal_tagger[chat.id] != start_msg.id:
+            return
+        # ---- DÜZELTME SONU ----
+
         u = member.user
         if u.is_bot:
             skipped_bots += 1
@@ -241,9 +253,12 @@ Sebep : {message.text}
     skipped_deleted = 0
     total_tagged = 0
 
-    
-
     async for member in app.get_chat_members(message.chat.id):
+        # ---- DÜZELTME ----
+        if message.chat.id not in kumsal_tagger or kumsal_tagger[message.chat.id] != start_msg.id:
+            return
+        # ---- DÜZELTME SONU ----
+
         u = member.user
         if u.is_bot:
             skipped_bots += 1
@@ -304,6 +319,11 @@ Sebep : {message.text}
     total_tagged = 0
 
     async for member in app.get_chat_members(message.chat.id):
+        # ---- DÜZELTME ----
+        if message.chat.id not in kumsal_tagger or kumsal_tagger[message.chat.id] != start_msg.id:
+            return
+        # ---- DÜZELTME SONU ----
+
         u = member.user
         if u.is_bot:
             skipped_bots += 1
@@ -327,10 +347,7 @@ Sebep : {message.text}
 🤖 __Atlanılan Bot: {skipped_bots}__
 💣 __Atlanılan Silinen Hesap: {skipped_deleted}__
 """)
-
-
-
-
+    
 @app.on_message(filters.command("anonimtag") & filters.group)
 async def anonimtag(app, message):
     # Sadece adminler kullanabilir
@@ -366,6 +383,11 @@ Sebep : {message.text}
     total_tagged = 0
 
     async for member in app.get_chat_members(message.chat.id):
+        # ---- DÜZELTME ----
+        if message.chat.id not in kumsal_tagger or kumsal_tagger[message.chat.id] != start_msg.id:
+            return
+        # ---- DÜZELTME SONU ----
+        
         u = member.user
         if u.is_bot:
             skipped_bots += 1
