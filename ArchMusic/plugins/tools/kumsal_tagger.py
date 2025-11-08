@@ -122,6 +122,8 @@ Sebep : {message.text}
 
 #--------------------------------------------------------------------------------------
 
+#--------------------------------------------------------------------------------------
+
 @app.on_message(filters.command("kurttag") & filters.group)
 async def kurttag(app, message):
     """
@@ -135,14 +137,6 @@ async def kurttag(app, message):
         await message.reply("❗ Bu komutu kullanmak için yönetici olmalısınız!")
         return
 
-    args = message.command
-    if len(args) > 1:
-        msg_content = " ".join(args[1:])
-    elif message.reply_to_message:
-        msg_content = message.reply_to_message.text or ""
-    else:
-        msg_content = ""
-
     total_members = 0
     async for member in app.get_chat_members(message.chat.id):
         user = member.user
@@ -151,7 +145,7 @@ async def kurttag(app, message):
 
     user = message.from_user
     chat = message.chat
-    
+
     await app.send_message(LOG_GROUP_ID, f"""
 Etiket işlemi bildirimi.
 
@@ -168,7 +162,6 @@ Sebep : {message.text}
 **🐺 ᴋᴜʀᴛ ᴏʏᴜɴᴜ ʙᴀşʟɪʏᴏʀ! ʜᴀʏᴅɪ ɢᴇʟ! 🌕🔥**
 
 **Botlar ve silinen hesaplar atlanacak.**
-
 👥 __Toplam Etiketlenecek Üye Sayısı: {total_members}__
 """)
 
@@ -176,15 +169,6 @@ Sebep : {message.text}
     skipped_bots = 0
     skipped_deleted = 0
     total_tagged = 0
-
-    howl_messages = [
-        "Ahuuu! Kurt oyunu seni çağırıyor! 🌕",
-        "Gece başlıyor, ulumaları duyuyor musun? 🐾",
-        "Kurtlar toplandı, sen de katıl! 🔥",
-        "Ateş yakıldı, kurtlar dans ediyor! 🌲",
-        "Uzaklardan bir uluma yankılandı... 🐺",
-        "Gece karanlık, kurtlar avda! 🌌",
-    ]
 
     async for member in app.get_chat_members(message.chat.id):
         user = member.user
@@ -197,13 +181,11 @@ Sebep : {message.text}
 
         total_tagged += 1
 
-        howl_text = random.choice(howl_messages)
-        text = f"🐺 [{user.first_name}](tg://user?id={user.id}) {msg_content or howl_text}"
-
-        # Durdurma kontrolü
+        # Durdurulma kontrolü
         if message.chat.id not in kumsal_tagger or kumsal_tagger[message.chat.id] != start_msg.id:
             return
 
+        text = f"🐺 [{user.first_name}](tg://user?id={user.id}) ᴋᴜʀᴛ ᴏʏᴜɴᴜ ʙᴀşʟɪʏᴏʀ! ʜᴀʏᴅɪ ɢᴇʟ! 🌕🔥"
         await app.send_message(message.chat.id, text)
         await asyncio.sleep(3)  # Her kullanıcı arasında 3 saniye bekleme
 
@@ -214,7 +196,8 @@ Sebep : {message.text}
 🤖 __Atlanılan Bot: {skipped_bots}__
 💣 __Atlanılan Silinen Hesap: {skipped_deleted}__
 """)
-    
+
+
     
 
 @app.on_message(filters.command("utag") & filters.group)
