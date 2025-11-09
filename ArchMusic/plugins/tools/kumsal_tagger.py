@@ -1,9 +1,8 @@
-
 import os
-import asyncio
 import random
 import time
 import datetime
+import asyncio  # <-- EKSİK IMPORT BURAYA EKLENDİ
 from random import shuffle
 from typing import List, Tuple, Union
 from datetime import datetime as dt
@@ -20,6 +19,7 @@ from pyrogram.types import (
 )
 from ArchMusic import app
 from config import LOG_GROUP_ID, OWNER_ID
+# kumsal.py dosyasının ArchMusic.plugins.tools altında olduğundan emin olun
 from ArchMusic.plugins.tools.kumsal import *
 
 kumsal_tagger = {}
@@ -67,7 +67,7 @@ Grup İD : `{chat.id}`
 
 Sebep : {message.text}
 """
- )
+    )
     
     num = 1
     estimated_time = (total_members // num) * 5
@@ -100,13 +100,20 @@ Sebep : {message.text}
         usrnum += 1
         total_tagged += 1
         usrtxt += f"• [{user.first_name}](tg://user?id={user.id})"
+        
+        # İptal kontrolü
         if message.chat.id not in kumsal_tagger or kumsal_tagger[message.chat.id] != start_msg.id:
             return
+            
         if usrnum == nums:
             await app.send_message(message.chat.id, f" **{msg_content}**\n\n{usrtxt}")
             usrnum = 0
             usrtxt = ""
             await asyncio.sleep(5)
+
+    # Döngü bittikten sonra kumsal_tagger'ı temizleyebiliriz (isteğe bağlı)
+    if message.chat.id in kumsal_tagger:
+        del kumsal_tagger[message.chat.id]
 
     await app.send_message(message.chat.id, f"""
 **Üye etiketleme işlemi tamamlandı** ✅
@@ -138,10 +145,9 @@ async def guntag(app, message):
     total_tagged = 0
 
     async for member in app.get_chat_members(message.chat.id):
-        # ---- DÜZELTME ----
+        # ---- DÜZELTME (Bu kontrol zaten kodunuzda vardı ve doğru) ----
         # Etiketlemenin iptal edilip edilmediğini kontrol et
         if message.chat.id not in kumsal_tagger or kumsal_tagger[message.chat.id] != start_msg.id:
-            # await app.send_message(message.chat.id, "⛔ __Günaydın etiketleme işlemi durduruldu!__") # İsteğe bağlı: Durdurulduğuna dair mesaj
             return  # İptal edildiyse fonksiyondan çık
         # ---- DÜZELTME SONU ----
 
@@ -158,6 +164,10 @@ async def guntag(app, message):
         text = random.choice(guntag_messages).format(user=f"[{u.first_name}](tg://user?id={u.id})")
         await app.send_message(message.chat.id, text)
         await asyncio.sleep(2)  # Her kullanıcıya 2 saniye arayla
+
+    # Döngü bittikten sonra kumsal_tagger'ı temizleyebiliriz (isteğe bağlı)
+    if message.chat.id in kumsal_tagger:
+        del kumsal_tagger[message.chat.id]
 
     await app.send_message(message.chat.id, f"""
 **Günaydın mesajları tamamlandı!** ✅
@@ -191,7 +201,7 @@ async def gecetag(app, message):
     total_tagged = 0
 
     async for member in app.get_chat_members(chat.id):
-        # ---- DÜZELTME ----
+        # ---- DÜZELTME (Bu kontrol zaten kodunuzda vardı ve doğru) ----
         if chat.id not in kumsal_tagger or kumsal_tagger[chat.id] != start_msg.id:
             return
         # ---- DÜZELTME SONU ----
@@ -210,6 +220,10 @@ async def gecetag(app, message):
         text = random.choice(gece_messages).format(user=f"[{u.first_name}](tg://user?id={u.id})")
         await app.send_message(chat.id, text)
         await asyncio.sleep(2)  # Her kullanıcıya 2 saniye arayla
+        
+    # Döngü bittikten sonra kumsal_tagger'ı temizleyebiliriz (isteğe bağlı)
+    if message.chat.id in kumsal_tagger:
+        del kumsal_tagger[message.chat.id]
 
     await app.send_message(chat.id, f"""
 **İyi geceler mesajları tamamlandı!** ✅
@@ -254,7 +268,7 @@ Sebep : {message.text}
     total_tagged = 0
 
     async for member in app.get_chat_members(message.chat.id):
-        # ---- DÜZELTME ----
+        # ---- DÜZELTME (Bu kontrol zaten kodunuzda vardı ve doğru) ----
         if message.chat.id not in kumsal_tagger or kumsal_tagger[message.chat.id] != start_msg.id:
             return
         # ---- DÜZELTME SONU ----
@@ -271,6 +285,10 @@ Sebep : {message.text}
         # Tekli mesaj
         await app.send_message(message.chat.id, f"[{u.first_name}](tg://user?id={u.id}), {random.choice(messages)}")
         await asyncio.sleep(2)  # Her kullanıcıya 2 saniye arayla
+        
+    # Döngü bittikten sonra kumsal_tagger'ı temizleyebiliriz (isteğe bağlı)
+    if message.chat.id in kumsal_tagger:
+        del kumsal_tagger[message.chat.id]
 
     await app.send_message(message.chat.id, f"""
 **Kurt oyunu davetleri tamamlandı** ✅
@@ -319,7 +337,7 @@ Sebep : {message.text}
     total_tagged = 0
 
     async for member in app.get_chat_members(message.chat.id):
-        # ---- DÜZELTME ----
+        # ---- DÜZELTME (Bu kontrol zaten kodunuzda vardı ve doğru) ----
         if message.chat.id not in kumsal_tagger or kumsal_tagger[message.chat.id] != start_msg.id:
             return
         # ---- DÜZELTME SONU ----
@@ -339,6 +357,10 @@ Sebep : {message.text}
             f"[{u.first_name}](tg://user?id={u.id}), {random.choice(tabu_messages)}"
         )
         await asyncio.sleep(2)  # Her kullanıcıya 2 saniye arayla
+
+    # Döngü bittikten sonra kumsal_tagger'ı temizleyebiliriz (isteğe bağlı)
+    if message.chat.id in kumsal_tagger:
+        del kumsal_tagger[message.chat.id]
 
     await app.send_message(message.chat.id, f"""
 **Tabu davetleri tamamlandı** ✅
@@ -383,7 +405,7 @@ Sebep : {message.text}
     total_tagged = 0
 
     async for member in app.get_chat_members(message.chat.id):
-        # ---- DÜZELTME ----
+        # ---- DÜZELTME (Bu kontrol zaten kodunuzda vardı ve doğru) ----
         if message.chat.id not in kumsal_tagger or kumsal_tagger[message.chat.id] != start_msg.id:
             return
         # ---- DÜZELTME SONU ----
@@ -403,6 +425,10 @@ Sebep : {message.text}
             f"[{u.first_name}](tg://user?id={u.id}), {random.choice(anonim_messages)}"
         )
         await asyncio.sleep(2)  # Her kullanıcıya 2 saniye arayla
+
+    # Döngü bittikten sonra kumsal_tagger'ı temizleyebiliriz (isteğe bağlı)
+    if message.chat.id in kumsal_tagger:
+        del kumsal_tagger[message.chat.id]
 
     await app.send_message(message.chat.id, f"""
 **Anonim davetleri tamamlandı** ✅
@@ -461,7 +487,7 @@ Grup İD : `{chat.id}`
 
 Sebep : {message.text}
 """
- )
+    )
     
     num = 5
     estimated_time = (total_members // num) * 5
@@ -494,13 +520,20 @@ Sebep : {message.text}
         usrnum += 1
         total_tagged += 1
         usrtxt += f"• [{user.first_name}](tg://user?id={user.id})\n"
+        
+        # İptal kontrolü
         if message.chat.id not in kumsal_tagger or kumsal_tagger[message.chat.id] != start_msg.id:
             return
+            
         if usrnum == nums:
             await app.send_message(message.chat.id, f" **{msg_content}**\n\n{usrtxt}")
             usrnum = 0
             usrtxt = ""
             await asyncio.sleep(5)
+            
+    # Döngü bittikten sonra kumsal_tagger'ı temizleyebiliriz (isteğe bağlı)
+    if message.chat.id in kumsal_tagger:
+        del kumsal_tagger[message.chat.id]
 
     await app.send_message(message.chat.id, f"""
 **Üye etiketleme işlemi tamamlandı** ✅
@@ -711,351 +744,351 @@ async def chatModeHandler(bot: app, msg: Message):
     
     elif kontrol(["selam", "slm", "sa", "selamlar", "selamm"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(slm)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
         #Bot chatmode komutları
     elif kontrol(["sahip"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(sahip)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
     
     elif kontrol(["naber"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(naber)
         await asyncio.sleep(0.06)  
-         
+        
     elif kontrol(["pelin"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(pelin)
-        await asyncio.sleep(0.06)        
-                 
+        await asyncio.sleep(0.06)         
+                
     elif kontrol(["nasılsın"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(nasılsın)
         await asyncio.sleep(0.06)         
-         
+        
     elif kontrol(["tm","tamam","tmm"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(tm)
-        await asyncio.sleep(0.06)          
-         
+        await asyncio.sleep(0.06)         
+        
     elif kontrol(["sus","suuss","suss"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(sus)
         await asyncio.sleep(0.06)  
     
     elif kontrol(["merhaba","mrb","meraba"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(merhaba)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
     
     elif kontrol(["yok"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(yok)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
         
     elif kontrol(["dur"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(dur)
-        await asyncio.sleep(0.06)        
-                 
+        await asyncio.sleep(0.06)         
+                
     elif kontrol(["bot", "botu"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(bott)
         await asyncio.sleep(0.06)         
-         
+        
     elif kontrol(["napıyorsun"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(napıyorsun)
-        await asyncio.sleep(0.06)          
-         
+        await asyncio.sleep(0.06)         
+        
     elif kontrol(["takılıyorum","takılıyom"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(takılıyorum)
         await asyncio.sleep(0.06)  
         
     elif kontrol(["he"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(he)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
     
     elif kontrol(["hayır"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(hayır)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
         
     elif kontrol(["tm"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(tm)
-        await asyncio.sleep(0.06)        
-                 
+        await asyncio.sleep(0.06)         
+                
     elif kontrol(["nerdesin"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(nerdesin)
         await asyncio.sleep(0.06)         
-         
+        
     elif kontrol(["özledim"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(özledim)
-        await asyncio.sleep(0.06)          
-         
+        await asyncio.sleep(0.06)         
+        
     elif kontrol(["bekle"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(bekle)
         await asyncio.sleep(0.06)  
         
     elif kontrol(["tünaydın"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(tünaydın)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
     
     elif kontrol(["günaydın"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(günaydın)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
         
     elif kontrol(["sohbetler"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(sohbetler)
-        await asyncio.sleep(0.06)        
-               
+        await asyncio.sleep(0.06)         
+            
     elif kontrol(["konuşalım","konusalım"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(konuşalım)
         await asyncio.sleep(0.06)         
-         
+        
     elif kontrol(["saat"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(saat)
-        await asyncio.sleep(0.06)          
-         
+        await asyncio.sleep(0.06)         
+        
     elif kontrol(["geceler"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(geceler)
         await asyncio.sleep(0.06)  
         
     elif kontrol(["şaka"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(şaka)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
     
     elif kontrol(["kimsin"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(kimsin)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
         
     elif kontrol(["günler"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(günler)
-        await asyncio.sleep(0.06)        
-                 
+        await asyncio.sleep(0.06)         
+                
     elif kontrol(["tanımıyorum"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(tanımıyorum)
         await asyncio.sleep(0.06)         
-         
+        
     elif kontrol(["konuşma"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(konuşma)
-        await asyncio.sleep(0.06)          
-         
+        await asyncio.sleep(0.06)         
+        
     elif kontrol(["teşekkürler","tesekkürler","tşkr"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(teşekkürler)
         await asyncio.sleep(0.06)  
         
     elif kontrol(["eyvallah","eywl"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(eyvallah)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
     
     elif kontrol(["sağol"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(sağol)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
         
     elif kontrol(["amk","aq","mg","mk"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(amk)
-        await asyncio.sleep(0.06)        
-                 
+        await asyncio.sleep(0.06)         
+                
     elif kontrol(["yoruldum"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(yoruldum)
         await asyncio.sleep(0.06)         
-         
+        
     elif kontrol(["yaş"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(yaş)
-        await asyncio.sleep(0.06)          
-         
+        await asyncio.sleep(0.06)         
+        
     elif kontrol(["eşşek","eşek"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(eşek)
         await asyncio.sleep(0.06)  
         
     elif kontrol(["canım"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(canım)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
     
     elif kontrol(["aşkım","askım","ask"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(aşkım)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
         
     elif kontrol(["uyu"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(uyu)
-        await asyncio.sleep(0.06)        
-                 
+        await asyncio.sleep(0.06)         
+                
     elif kontrol(["nereye","nere"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(nereye)
         await asyncio.sleep(0.06)         
-         
+        
     elif kontrol(["naber"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(naber)
-        await asyncio.sleep(0.06)          
-         
+        await asyncio.sleep(0.06)         
+        
     elif kontrol(["küstüm","küsüm"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(küstüm)
         await asyncio.sleep(0.06)  
         
     elif kontrol(["peki"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(peki)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
     
     elif kontrol(["ne","nee","neee","ney"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(ne)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
         
     elif kontrol(["takım"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(takım)
-        await asyncio.sleep(0.06)        
-                 
+        await asyncio.sleep(0.06)         
+                
     elif kontrol(["benimle","bnmle"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(benimle)
         await asyncio.sleep(0.06)         
-         
+        
     elif kontrol(["seviyormusun","seviyomusun"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(seviyormusun)
-        await asyncio.sleep(0.06)          
-         
+        await asyncio.sleep(0.06)         
+        
     elif kontrol(["nediyon"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(nediyon)
         await asyncio.sleep(0.06)  
         
     elif kontrol(["özür"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(özür)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
     
     elif kontrol(["niye"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(niye)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
         
     elif kontrol(["bilmiyorum","bilmiyom","bilmiyos"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(bilmiyorum)
-        await asyncio.sleep(0.06)        
-                 
+        await asyncio.sleep(0.06)         
+                
     elif kontrol(["küsme"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(küsme)
         await asyncio.sleep(0.06)         
-         
+        
     elif kontrol(["kumsal"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(kumsal)
-        await asyncio.sleep(0.06)          
-         
+        await asyncio.sleep(0.06)         
+        
     elif kontrol(["nerelisin"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(nerelisin)
         await asyncio.sleep(0.06)  
     
     elif kontrol(["sevgilin"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(sevgilin)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
     
     elif kontrol(["olur"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(olur)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
         
     elif kontrol(["olmas","olmaz"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(olmaz)
-        await asyncio.sleep(0.06)        
-                 
+        await asyncio.sleep(0.06)         
+                
     elif kontrol(["nasıl"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(nasıl)
         await asyncio.sleep(0.06)         
-         
+        
     elif kontrol(["hayatım"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(hayatım)
-        await asyncio.sleep(0.06)          
-         
+        await asyncio.sleep(0.06)         
+        
     elif kontrol(["cus"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(cus)
         await asyncio.sleep(0.06)  
         
     elif kontrol(["vallaha","valla","vallahi"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(vallaha)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
     
     elif kontrol(["yo"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(yo)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
         
     elif kontrol(["hayırdır"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(hayırdır)
-        await asyncio.sleep(0.06)        
-                 
+        await asyncio.sleep(0.06)         
+                
     elif kontrol(["of"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(of)
         await asyncio.sleep(0.06)         
-         
+        
     elif kontrol(["aynen"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(aynen)
-        await asyncio.sleep(0.06)          
-         
+        await asyncio.sleep(0.06)         
+        
     elif kontrol(["ağla"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(ağla)
         await asyncio.sleep(0.06)  
         
     elif kontrol(["ağlama"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(ağlama)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
     
     elif kontrol(["sex","seks"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(sex)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
         
     elif kontrol(["evet"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(evet)
-        await asyncio.sleep(0.06)        
-                 
+        await asyncio.sleep(0.06)         
+                
     elif kontrol(["hmm","hm","hımm","hmmm"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(hmm)
         await asyncio.sleep(0.06)         
-         
+        
     elif kontrol(["hıhım"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(hıhım)
-        await asyncio.sleep(0.06)          
-         
+        await asyncio.sleep(0.06)         
+        
     elif kontrol(["git"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(git)
         await asyncio.sleep(0.06)  
         
     elif kontrol(["komedi"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(komedi)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
     
     elif kontrol(["knka","kanka"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(knka)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
         
     elif kontrol(["ban"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(ban)
-        await asyncio.sleep(0.06)        
-                 
+        await asyncio.sleep(0.06)         
+                
     elif kontrol(["sen"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(sen)
         await asyncio.sleep(0.06)         
-         
+        
     elif kontrol(["hiç"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(hiç)
-        await asyncio.sleep(0.06)          
-         
+        await asyncio.sleep(0.06)         
+        
     elif kontrol(["aç","ac","açç"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(aç)
         await asyncio.sleep(0.06)  
         
     elif kontrol(["barışalım","batısalım"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(barışalım)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
     
     elif kontrol(["şimdi"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(şimdi)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
         
     elif kontrol(["varoş"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(varoş)
-        await asyncio.sleep(0.06)        
-                 
+        await asyncio.sleep(0.06)         
+                
     elif kontrol(["arkadaş","arkadas"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(arkadaş)
         await asyncio.sleep(0.06)         
-         
+        
     elif kontrol(["sus","suss","suus"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(sus)
-        await asyncio.sleep(0.06)          
-         
+        await asyncio.sleep(0.06)         
+        
     elif kontrol(["üzüldüm","üşüldüm"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(üzüldüm)
         await asyncio.sleep(0.06)  
         
     elif kontrol(["kötü"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(kötü)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
     
     elif kontrol(["akşamlar"], text): # * Selam yazısı metnin içinde varsa cevap veriyoruz
         reply = random.choice(akşamlar)
-        await asyncio.sleep(0.06)   
+        await asyncio.sleep(0.06)    
         
     try:
         await msg.reply(reply)
@@ -1073,7 +1106,7 @@ async def games(c: app, m: Message):
 
     if command == "zar":
         return await c.send_dice(m.chat.id, emoji="🎲",
-                                 reply_markup=InlineKeyboardMarkup(
+                                    reply_markup=InlineKeyboardMarkup(
                                         [
                                             [
                                                 InlineKeyboardButton(
@@ -1087,67 +1120,67 @@ async def games(c: app, m: Message):
     elif command == "dart":
         return await c.send_dice(m.chat.id, emoji="🎯",
                                     reply_markup=InlineKeyboardMarkup(
+                                        [
                                             [
-                                                [
-                                                    InlineKeyboardButton(
-                                                        "Tekrar Oyna ♻️", callback_data="dart"
-                                                    ),
-                                                ]
+                                                InlineKeyboardButton(
+                                                    "Tekrar Oyna ♻️", callback_data="dart"
+                                                ),
                                             ]
-                                        )
+                                        ]
                                     )
+                                )
 
     elif command == "basket":
         return await c.send_dice(m.chat.id, emoji="🏀",
                                     reply_markup=InlineKeyboardMarkup(
+                                        [
                                             [
-                                                [
-                                                    InlineKeyboardButton(
-                                                        "Tekrar Oyna ♻️", callback_data="basket"
-                                                    ),
-                                                ]
+                                                InlineKeyboardButton(
+                                                    "Tekrar Oyna ♻️", callback_data="basket"
+                                                ),
                                             ]
-                                        )
+                                        ]
                                     )
+                                )
 
     elif command == "futbol":
         return await c.send_dice(m.chat.id, emoji="⚽",
                                     reply_markup=InlineKeyboardMarkup(
+                                        [
                                             [
-                                                [
-                                                    InlineKeyboardButton(
-                                                        "Tekrar Oyna ♻️", callback_data="futbol"
-                                                    ),
-                                                ]
+                                                InlineKeyboardButton(
+                                                    "Tekrar Oyna ♻️", callback_data="futbol"
+                                                ),
                                             ]
-                                        )
+                                        ]
                                     )
+                                )
 
     elif command == "bowling":
         return await c.send_dice(m.chat.id, emoji="🎳",
                                     reply_markup=InlineKeyboardMarkup(
+                                        [
                                             [
-                                                [
-                                                    InlineKeyboardButton(
-                                                        "Tekrar Oyna ♻️", callback_data="bowling"
-                                                    ),
-                                                ]
+                                                InlineKeyboardButton(
+                                                    "Tekrar Oyna ♻️", callback_data="bowling"
+                                                ),
                                             ]
-                                        )
+                                        ]
                                     )
+                                )
 
     elif command == "slot":
         return await c.send_dice(m.chat.id, emoji="🎰",
                                     reply_markup=InlineKeyboardMarkup(
+                                        [
                                             [
-                                                [
-                                                    InlineKeyboardButton(
-                                                        "Tekrar Oyna ♻️", callback_data="slot"
-                                                    ),
-                                                ]
+                                                InlineKeyboardButton(
+                                                    "Tekrar Oyna ♻️", callback_data="slot"
+                                                ),
                                             ]
-                                        )
+                                        ]
                                     )
+                                )
 
     elif command == "para":
         return await m.reply(
@@ -1176,7 +1209,7 @@ async def games(c: app, m: Message):
 @app.on_callback_query(filters.regex("zar"))
 async def zar(client: app, query: CallbackQuery):
     await client.send_dice(query.message.chat.id, emoji="🎲",
-                           reply_markup=InlineKeyboardMarkup(
+                            reply_markup=InlineKeyboardMarkup(
                                 [
                                     [
                                         InlineKeyboardButton(
@@ -1190,7 +1223,7 @@ async def zar(client: app, query: CallbackQuery):
 @app.on_callback_query(filters.regex("dart"))
 async def dart(client: app, query: CallbackQuery):
     await client.send_dice(query.message.chat.id, emoji="🎯",
-                           reply_markup=InlineKeyboardMarkup(
+                            reply_markup=InlineKeyboardMarkup(
                                 [
                                     [
                                         InlineKeyboardButton(
@@ -1204,7 +1237,7 @@ async def dart(client: app, query: CallbackQuery):
 @app.on_callback_query(filters.regex("basket"))
 async def basket(client: app, query: CallbackQuery):
     await client.send_dice(query.message.chat.id, emoji="🏀",
-                           reply_markup=InlineKeyboardMarkup(
+                            reply_markup=InlineKeyboardMarkup(
                                 [
                                     [
                                         InlineKeyboardButton(
@@ -1218,7 +1251,7 @@ async def basket(client: app, query: CallbackQuery):
 @app.on_callback_query(filters.regex("futbol"))
 async def futbol(client: app, query: CallbackQuery):
     await client.send_dice(query.message.chat.id, emoji="⚽",
-                           reply_markup=InlineKeyboardMarkup(
+                            reply_markup=InlineKeyboardMarkup(
                                 [
                                     [
                                         InlineKeyboardButton(
@@ -1232,7 +1265,7 @@ async def futbol(client: app, query: CallbackQuery):
 @app.on_callback_query(filters.regex("bowling"))
 async def bowling(client: app, query: CallbackQuery):
     await client.send_dice(query.message.chat.id, emoji="🎳",
-                           reply_markup=InlineKeyboardMarkup(
+                            reply_markup=InlineKeyboardMarkup(
                                 [
                                     [
                                         InlineKeyboardButton(
@@ -1246,7 +1279,7 @@ async def bowling(client: app, query: CallbackQuery):
 @app.on_callback_query(filters.regex("slot"))
 async def slot(client: app, query: CallbackQuery):
     await client.send_dice(query.message.chat.id, emoji="🎰",
-                           reply_markup=InlineKeyboardMarkup(
+                            reply_markup=InlineKeyboardMarkup(
                                 [
                                     [
                                         InlineKeyboardButton(
@@ -1301,7 +1334,7 @@ async def oner(bot: app, message: Message):
         
     chat = message.chat
     if not message.reply_to_message:
-        await message.reply_text("🚫 Bir kullanıcıya cevap verin!")
+        await message.reply_text("🚫 **Bir kullanıcıya cevap verin!**")
         return
     if message.reply_to_message.from_user.id == OWNER_ID:
         await message.reply_text(f"{random.choice(sarki1)}")
