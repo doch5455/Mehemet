@@ -4,6 +4,7 @@ from ArchMusic import app
 
 
 def help_pannel(_, START: Union[bool, int] = None):
+
     first = [
         InlineKeyboardButton(
             text=_["CLOSEMENU_BUTTON"], callback_data="close"
@@ -21,23 +22,31 @@ def help_pannel(_, START: Union[bool, int] = None):
 
     upl = InlineKeyboardMarkup(
         [
+            # 1. sıra
             [
-                InlineKeyboardButton(
-                    text=_["H_B_1"], callback_data="help_callback hb1"
-                ),
-                InlineKeyboardButton(
-                    text=_["H_B_2"], callback_data="help_callback hb2"
-                ),
+                InlineKeyboardButton(text=_["H_B_1"], callback_data="help_callback hb1"),
+                InlineKeyboardButton(text=_["H_B_2"], callback_data="help_callback hb2"),
             ],
+
+            # 2. sıra
             [
-                InlineKeyboardButton(
-                    text=_["H_B_3"], callback_data="help_callback hb3"
-                ),
+                InlineKeyboardButton(text=_["H_B_3"], callback_data="help_callback hb3"),
+                InlineKeyboardButton(text=_["H_B_4"], callback_data="help_callback hb4"),
             ],
+
+            # 3. sıra (SON 3 YAN YANA)
+            [
+                InlineKeyboardButton(text=_["H_B_5"], callback_data="help_callback hb5"),
+                InlineKeyboardButton(text=_["H_B_6"], callback_data="help_callback hb6"),
+                InlineKeyboardButton(text=_["H_B_7"], callback_data="help_callback hb7"),
+            ],
+
+            # 4. sıra → BACK + CLOSE
             mark,
         ]
     )
     return upl
+
 
 
 def help_back_markup(_):
