@@ -1,88 +1,110 @@
-HELP_1 = """<b>🎵 𝙈𝙐𝙕𝙄𝙆 𝙆𝙊𝙈𝙐𝙏𝙇𝘼𝙍𝙄 🎵</b>
+HELP_1 = """<b>🎵 𝙈Ü𝙕İ𝙆 𝙊𝙔𝙉𝘼𝙏𝙈𝘼 𝙆𝙊𝙈𝙐𝙏𝙇𝘼𝙍𝙄 🎵</b>
 
-⏸️  /duraklat       - 𝙈üziği duraklatır
-▶️  /devam          - 𝙈üziği devam ettirir
-⏩  /atla            - Çalan müziği atlar
-⏹️  /dur            - 𝙈üziği durdurur
-🔀  /karistir        - Parçaları karıştırır
-📑  /sira            - Sıradaki müzikleri gösterir
-⏭️  /ilerisar X      - 𝙈üziği X sn ileri sarar
-⏮️  /gerisar X       - 𝙈üziği X sn geri sarar
-🔁  /dongu X         - 𝙈üziği X kez döngüye alır
+▶️  <b>/oynat</b> [şarkı]      - Müziği oynatır
+▶️  <b>/play</b> [şarkı]       - Aynı şekilde müziği oynatır
 
-💡  Örnek: /ilerisar 15 → 15 saniye ileri
+🎦  <b>/vplay</b> [video]      - Videoyu oynatır
+🎦  <b>/voynat</b> [video]     - Videoyu oynatır
 
-▶️  /oynat /play      - 𝙈üziği oynatır (Ör: /oynat Gönül Dağı)
-🎦  /vplay /voynat    - Videoyu oynatır (Ör: /vplay video ismi)
-📥  /bul /indir       - Youtube'dan müzik indirir ([müzik adı] veya [Youtube linki])
-❤️‍🩹 /playlist       - Oynatma listenizi gösterir
-🆑  /listemisil       - Listeden müzik siler
-📃  /oynat
+📥  <b>/bul</b> [isim/link]    - YouTube'dan müzik bulur
+📥  <b>/indir</b> [isim/link]  - YouTube'dan müzik indirir
+
+❤️‍🩹 <b>/playlist</b>         - Oynatma listenizi gösterir
+🆑  <b>/listemisil</b>        - Listeden müzik siler
 """
 
-HELP_2 = """🥏 <u>𝘽𝙊𝙏 𝙆𝙊𝙈𝙐𝙏𝙇𝘼𝙍𝙄</u>
 
-⚡  /start          - Başlatma panelini gösterir
-⚙️  /ayarlar        - Ayarlar menüsüne ulaşır
-🆘  /yardim          - Yardım menüsüne ulaşır
-📡  /ping           - Ping süresini ve sistem durumunu gösterir
-🔄  /restart        - Botu yeniden başlatır
-♻️  /reboot          - Botu yeniden başlatır
-⬆️  /update          - Botu güncelle
-📊  /speedtest       - Sunucu hızlarını kontrol edin
-🛠️  /maintenance     - Botu bakıma alır (enable/disable)
-📜  /logger          - Aranan sorguları günlüğe kaydeder (enable/disable)
-📂  /get_log         - Bot kaydını alın ([Number of Lines])
-⏹️  /autoend         - Kimse dinlemiyorsa 3 dk sonra otomatik yayını sonlandırır
-➕  /addsudo          - Sudo ekler ([Username veya reply])
-➖  /delsudo          - Sudo listesinden çıkarır ([Username veya reply])
-🆘  /sudolist         - Sudo kullanıcılarını gösterir
+HELP_2 = """<b>🎧 𝙈Ü𝙕İ𝙆 𝙆𝙊𝙉𝙏𝙍𝙊𝙇 𝙆𝙊𝙈𝙐𝙏𝙇𝘼𝙍𝙄 🎧</b>
 
-💬 <b>ℝ𝙀𝙆𝙇𝘼𝙈 𝙆𝙊𝙈𝙐𝙏𝙐</b>
-📢  /broadcast        - Mesajı Bot'un sohbetlerine yayınlar
-📌  -pin              - Mesajı sabitler
-🔔  -pinloud          - Mesajı yüksek sesli bildirimle sabitler
-👤  -user             - Mesajı botu başlatan kullanıcılara yayınlar
-🤖  -assistant        - Mesajı botun asistan hesabından yayınlar
-🚫  -nobot            - Mesaj yayınlamayı engeller
+⏸️  <b>/duraklat</b>      - Müziği duraklatır
+▶️  <b>/devam</b>         - Duraklatılan müziği devam ettirir
+⏩  <b>/atla</b>          - Çalan müziği atlar
+⏹️  <b>/dur</b>           - Müziği tamamen durdurur
 
-⛔ <b>𝙀𝙉𝙂𝙀𝙇𝙇𝙀𝙈𝙀 𝙆𝙊𝙈𝙐𝙏𝙐</b>
-❌  /blacklistchat     - Sohbeti kara listeye alır
-✅  /whitelistchat     - Kara listeden çıkarır
-📋  /blacklistedchat   - Kara listeyi kontrol eder
-🚫  /gban              - Kullanıcıyı yasaklar ([Kullanıcı adı veya reply])
-♻️  /ungban            - Kullanıcıyı yasaktan çıkarır ([Kullanıcı adı veya reply])
-📄  /gbannedusers      - Yasaklı kullanıcı listesini gösterir
+🔀  <b>/karistir</b>      - Parçaları karıştırır
+📑  <b>/sira</b>          - Sıradaki müzikleri gösterir
+
+⏭️  <b>/ilerisar</b> X   - Müziği X sn ileri sarar
+⏮️  <b>/gerisar</b> X    - Müziği X sn geri sarar
+🔁  <b>/dongu</b> X       - Müziği X kez döngüye alır
 """
 
-HELP_3 = """<b>🎮 𝙀𝙏İ𝙆𝙀𝙏 & 𝙀Ğ𝙇𝙀𝙉𝘾𝙀 𝙆𝙊𝙈𝙐𝙏𝙇𝘼𝙍𝙄 🎮</b>
 
-🤖  /chatmode      - Yapay zekayı grup sohbetinde çalıştırır  
-👥  /tag           - Grubunuzdaki tüm üyeleri isimleriyle etiketler  
-👥  /utag          - Grubunuzdaki tüm üyeleri toplu olarak etiketler  
+HELP_3 = """<b>🤖 𝘽𝙊𝙏 𝙏𝙀𝙈𝙀𝙇 𝙆𝙊𝙈𝙐𝙏𝙇𝘼𝙍𝙄 🤖</b>
 
-➪  /guntag        - Üyelere günaydın mesajı atar
-➪  /gecetag       - Üyelere iyi geceler mesajı atar
-➪  /tabutag       - Tabu oyununa davet eder
-➪  /kurttag       - Kurt oyununa davet eder
-➪  /anonimtag     - Anonim oyununa davet eder
+⚡  <b>/start</b>        - Başlatma panelini gösterir
+⚙️  <b>/ayarlar</b>      - Ayarlar menüsünü açar
+🆘  <b>/yardim</b>       - Yardım menüsünü açar
+📡  <b>/ping</b>         - Gecikme süresini gösterir
+📊  <b>/speedtest</b>    - Sunucu hız testini yapar
+"""
 
-💘  /eros          - Aşk listesini günceller veya eşleştirme yapar  
 
-🎲  /zar           - Zar atar (1️⃣-6️⃣ arası rastgele sayı)  
-🎯  /dart          - Dart atar  
-🏀  /basket        - Basketbol oyunu oynar  
-⚽  /fotbol        - Futbol oyunu oynar  
-🎳  /bowling       - Bowling oyunu oynar  
+HELP_4 = """<b>🛠️ 𝙎İ𝙎𝙏𝙀𝙈 & 𝙆𝙐𝙍𝙐𝘾𝙐 𝙆𝙊𝙈𝙐𝙏𝙇𝘼𝙍𝙄 🛠️</b>
 
-🎰  /slot          - Slot makinesi oynar  
-💸  /para          - Mevcut paranı gösterir veya günceller  
+🔄  <b>/restart</b>                 - Botu yeniden başlatır  
+⬆️  <b>/update</b>                  - Botu günceller  
+♻️  <b>/reboot</b>                  - Sunucuyu yeniden başlatır  
 
-😂  /mani          - Rastgele mani söyler  
-🤣  /saka          - Şaka yapar  
-👋  /slap          - Birini tokatlar (eğlencelik komut)  
-💡  /oner          - Rastgele öneri verir (film, müzik, vs.)
+🛠️  <b>/maintenance</b> on/off     - Botu bakıma alır / çıkarır  
+⏹️  <b>/autoend</b> on/off         - Yayın boşsa otomatik kapatma  
+📜  <b>/logger</b> on/off           - Arama loglarını aç/kapat  
+📂  <b>/get_log</b> [satır]         - Log dosyasını çeker  
+"""
 
-❤️  /d             - Doğruluk oyunu başlatır  
-🔥  /c             - Cesaret oyunu başlatır
+
+HELP_5 = """<b>👑 𝙆𝙐𝙍𝙐𝘾𝙐 & 𝙎𝙐𝘿𝙊 𝙔Ö𝙉𝙀𝙏İ𝙈 👑</b>
+
+<b>— Sudo Kullanıcı Yönetimi —</b>
+➕  <b>/addsudo</b>                 - Sudo kullanıcı ekler  
+➖  <b>/delsudo</b>                 - Sudo kullanıcı siler  
+📜  <b>/sudolist</b>                - Sudo kullanıcılarını gösterir  
+
+<b>— Kara Liste Yönetimi —</b>
+❌  <b>/blacklistchat</b>           - Sohbeti kara listeye alır  
+✅  <b>/whitelistchat</b>           - Sohbeti kara listeden çıkarır  
+📋  <b>/blacklistedchat</b>         - Kara listeleri görüntüler  
+
+<b>— Global Yasak —</b>
+🚫  <b>/gban</b> [kullanıcı]        - Global yasak  
+♻️  <b>/ungban</b> [kullanıcı]      - Global yasağı kaldırır  
+📄  <b>/gbannedusers</b>            - Global ban listesi  
+"""
+
+
+HELP_6 = """<b>🎉 𝙀Ğ𝙇𝙀𝙉𝘾𝙀 𝙆𝙊𝙈𝙐𝙏𝙇𝘼𝙍𝙄 🎉</b>
+
+🎲  <b>/zar</b>           - Zar atar  
+🎯  <b>/dart</b>          - Dart atar  
+🏀  <b>/basket</b>        - Basket atar  
+⚽  <b>/fotbol</b>        - Futbol oyunu  
+🎳  <b>/bowling</b>       - Bowling oyunu  
+
+🎰  <b>/slot</b>          - Slot makinesi  
+💸  <b>/para</b>          - Para sistemi  
+
+😂  <b>/mani</b>          - Rastgele mani  
+🤣  <b>/saka</b>          - Şaka yapar  
+👋  <b>/slap</b>          - Tokat atar  
+💡  <b>/oner</b>          - Rastgele öneri  
+
+❤️  <b>/d</b>             - Doğruluk  
+🔥  <b>/c</b>             - Cesaret  
+"""
+
+
+HELP_7 = """<b>👥 𝙀𝙏İ𝙆𝙀𝙏 𝙆𝙊𝙈𝙐𝙏𝙇𝘼𝙍𝙄 👥</b>
+
+🤖  <b>/chatmode</b>      - Yapay zekayı grup sohbetinde çalıştırır  
+
+👥  <b>/tag</b>           - Tüm üyeleri isimle etiketler  
+👥  <b>/utag</b>          - Tüm üyeleri toplu etiketler  
+
+➪  <b>/guntag</b>        - Günaydın  
+➪  <b>/gecetag</b>       - İyi geceler  
+➪  <b>/tabutag</b>       - Tabu oyunu  
+➪  <b>/kurttag</b>       - Kurt oyunu  
+➪  <b>/anonimtag</b>     - Anonim oyun  
+
+💘  <b>/eros</b>          - Aşk sistemi  
 """
