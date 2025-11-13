@@ -396,35 +396,24 @@ def telegram_markup_timer(_, chat_id, played, dur, videoid):
     return buttons
 
 
-
-def stream_markup(_, videoid, chat_id, played="00:00", total="03:00"):
-    # Süreleri saniyeye çevir
-    def time_to_sec(t):
-        parts = list(map(int, t.split(":")))
-        return parts[0] * 60 + parts[1] if len(parts) == 2 else 0
-
-    played_sec = time_to_sec(played)
-    total_sec = time_to_sec(total) or 1
-    ratio = played_sec / total_sec
-    pos = int(ratio * 10)
-
-    # 🔹 Mavi bar hesaplama
-    bar = "".join("🔹" if i == pos else "⠂" for i in range(10))
-    bar_text = f"{played}  {bar}  {total}"
-
-    # 🔘 Butonlar (sadece bu satır)
+def stream_markup(_, videoid, chat_id):
     buttons = [
-        [InlineKeyboardButton(text=bar_text, callback_data="nonclickable")],
         [
             InlineKeyboardButton(
-                text="🩵 𝗞𝗮𝗻𝗮𝗹",
+                text="➕ 𝐁𝐞𝐧𝐢 𝐆𝐫𝐮𝐛𝐮𝐧𝐚 𝐄𝐤𝐥𝐞",
+                url=f"https://t.me/{app.username}?startgroup=true"
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                text="🩵 𝐊𝐚𝐧𝐚𝐥",
                 url="https://t.me/MaviDuyuru"
             ),
             InlineKeyboardButton(
-                text="🗑️ 𝗞𝗮𝗽𝗮𝘁",
+                text="🗑️ 𝐊𝐚𝐩𝐚𝐭",
                 callback_data="close"
-            ),
-        ],
+            )
+        ]
     ]
     return buttons
 
