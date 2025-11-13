@@ -4,9 +4,12 @@ from ArchMusic import app
 
 
 def help_pannel(_, START: Union[bool, int] = None):
-
-    # ALT – GERİ & KAPAT BUTONLARI
-    control_btns = [
+    first = [
+        InlineKeyboardButton(
+            text=_["CLOSEMENU_BUTTON"], callback_data="close"
+        )
+    ]
+    second = [
         InlineKeyboardButton(
             text=_["BACK_BUTTON"], callback_data="settingsback_helper"
         ),
@@ -14,34 +17,27 @@ def help_pannel(_, START: Union[bool, int] = None):
             text=_["CLOSEMENU_BUTTON"], callback_data="close"
         ),
     ]
+    mark = second if START else first
 
     upl = InlineKeyboardMarkup(
         [
-            # 1. SIRA
             [
-                InlineKeyboardButton(text=_["H_B_1"], callback_data="help_callback hb1"),
-                InlineKeyboardButton(text=_["H_B_2"], callback_data="help_callback hb2"),
+                InlineKeyboardButton(
+                    text=_["H_B_1"], callback_data="help_callback hb1"
+                ),
+                InlineKeyboardButton(
+                    text=_["H_B_2"], callback_data="help_callback hb2"
+                ),
             ],
-
-            # 2. SIRA
             [
-                InlineKeyboardButton(text=_["H_B_3"], callback_data="help_callback hb3"),
-                InlineKeyboardButton(text=_["H_B_4"], callback_data="help_callback hb4"),
+                InlineKeyboardButton(
+                    text=_["H_B_3"], callback_data="help_callback hb3"
+                ),
             ],
-
-            # 3. SIRA → SON ÜÇ BUTTON YAN YANA
-            [
-                InlineKeyboardButton(text=_["H_B_5"], callback_data="help_callback hb5"),
-                InlineKeyboardButton(text=_["H_B_6"], callback_data="help_callback hb6"),
-                InlineKeyboardButton(text=_["H_B_7"], callback_data="help_callback hb7"),
-            ],
-
-            # 4. SIRA → GERİ + KAPAT
-            control_btns,
+            mark,
         ]
     )
     return upl
-
 
 
 def help_back_markup(_):
