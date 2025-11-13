@@ -82,11 +82,13 @@ async def helper_cb(client, callback: types.CallbackQuery, _):
     keyboard = help_back_markup(_)
 
     help_sections = {
-        "hb1": helpers.HELP_1,
-        "hb2": helpers.HELP_2,
-        "hb3": helpers.HELP_3,
-        
-        
+    "hb1": helpers.HELP_1,
+    "hb2": helpers.HELP_2,
+    "hb3": helpers.HELP_3,
+    "hb4": helpers.HELP_4,
+    "hb5": helpers.HELP_5,
+    "hb6": helpers.HELP_6,
+    "hb7": helpers.HELP_7,       
     }
 
     if cb in help_sections:
