@@ -1,5 +1,6 @@
 import random
 from pyrogram.types import InlineKeyboardButton
+from ArchMusic import app
 
 selection = [
     "▁▄▂▇▄▅▄▅▃",
@@ -17,71 +18,83 @@ selection = [
     "▃▅▂▅▃▇▄▅▃",
 ]
 
-# 🔹 Basit zaman dönüştürücü
+
 def time_to_sec(time_str):
     parts = list(map(int, time_str.split(":")))
     return parts[0] * 60 + parts[1] if len(parts) == 2 else 0
 
 
-# ───────────────────────────────
-# 🎧 Stream oynatma (YouTube vb.)
-# ───────────────────────────────
+# ===================================================================
+# STREAM MARKUP TIMER — BAR KALDIRILDI
+# ===================================================================
 def stream_markup_timer(_, videoid, chat_id, played, dur):
-    played_sec = time_to_sec(played)
-    total_sec = time_to_sec(dur) or 1
-    ratio = played_sec / total_sec
-    pos = int(ratio * 8)
-
-    bar_symbols = ["➖"] * 8
-    pos = min(pos, len(bar_symbols) - 1)
-    bar_symbols[pos] = "🔘"
-    bar = "".join(bar_symbols)
-
     buttons = [
-        [InlineKeyboardButton("🩵 Mavi Duyuru", url="https://t.me/MaviDuyuru")],
-        [InlineKeyboardButton(f"{played} ⟪ {bar} ⟫ {dur}", callback_data="nonclickable")],
         [
-            InlineKeyboardButton("⏮", callback_data=f"ADMIN_1|{chat_id}"),
-            InlineKeyboardButton("⏸", callback_data=f"pausevc|{chat_id}"),
-            InlineKeyboardButton("▶️", callback_data=f"resumevc|{chat_id}"),
-            InlineKeyboardButton("⏭", callback_data=f"ADMIN_2|{chat_id}"),
-            InlineKeyboardButton("⏹", callback_data=f"stopvc|{chat_id}"),
+            InlineKeyboardButton(
+                "➕ Beni Grubuna Ekle",
+                url=f"telegram://resolve?domain={app.username}&startgroup=true"
+            )
         ],
         [
-            InlineKeyboardButton("✅ Listeye Ekle", callback_data=f"add_playlist {videoid}"),
-            InlineKeyboardButton("🔮 Kontrol Paneli", callback_data=f"PanelMarkup None|{chat_id}"),
+            InlineKeyboardButton("🩵 Kanal", url="https://t.me/MaviDuyuru"),
+            InlineKeyboardButton("✖️ Kapat", callback_data="close"),
         ],
     ]
     return buttons
 
 
-# ───────────────────────────────
-# 🌀 Telegram stream oynatma
-# ───────────────────────────────
+# ===================================================================
+# TELEGRAM MARKUP TIMER — BAR KALDIRILDI
+# ===================================================================
 def telegram_markup_timer(_, chat_id, played, dur, videoid):
-    played_sec = time_to_sec(played)
-    total_sec = time_to_sec(dur) or 1
-    ratio = played_sec / total_sec
-    pos = int(ratio * 8)
-
-    bar_symbols = ["➖"] * 8
-    pos = min(pos, len(bar_symbols) - 1)
-    bar_symbols[pos] = "🔘"
-    bar = "".join(bar_symbols)
-
     buttons = [
-        [InlineKeyboardButton("🩵 Mavi Duyuru", url="https://t.me/MaviDuyuru")],
-        [InlineKeyboardButton(f"{played} ⟪ {bar} ⟫ {dur}", callback_data="nonclickable")],
         [
-            InlineKeyboardButton("⏮", callback_data=f"ADMIN_1|{chat_id}"),
-            InlineKeyboardButton("⏸", callback_data=f"pausevc|{chat_id}"),
-            InlineKeyboardButton("▶️", callback_data=f"resumevc|{chat_id}"),
-            InlineKeyboardButton("⏭", callback_data=f"ADMIN_2|{chat_id}"),
-            InlineKeyboardButton("⏹", callback_data=f"stopvc|{chat_id}"),
+            InlineKeyboardButton(
+                "➕ Beni Grubuna Ekle",
+                url=f"telegram://resolve?domain={app.username}&startgroup=true"
+            )
         ],
         [
-            InlineKeyboardButton("✅ Listeye Ekle", callback_data=f"add_playlist {videoid}"),
-            InlineKeyboardButton("🔮 Kontrol Paneli", callback_data=f"PanelMarkup None|{chat_id}"),
+            InlineKeyboardButton("🩵 Kanal", url="https://t.me/MaviDuyuru"),
+            InlineKeyboardButton("✖️ Kapat", callback_data="close"),
+        ],
+    ]
+    return buttons
+
+
+# ===================================================================
+# STREAM MARKUP (NO TIMER)
+# ===================================================================
+def stream_markup(_, videoid, chat_id):
+    buttons = [
+        [
+            InlineKeyboardButton(
+                "➕ Beni Grubuna Ekle",
+                url=f"telegram://resolve?domain={app.username}&startgroup=true"
+            )
+        ],
+        [
+            InlineKeyboardButton("🩵 Kanal", url="https://t.me/MaviDuyuru"),
+            InlineKeyboardButton("✖️ Kapat", callback_data="close"),
+        ],
+    ]
+    return buttons
+
+
+# ===================================================================
+# TELEGRAM MARKUP (NO TIMER)
+# ===================================================================
+def telegram_markup(_, chat_id):
+    buttons = [
+        [
+            InlineKeyboardButton(
+                "➕ Beni Grubuna Ekle",
+                url=f"telegram://resolve?domain={app.username}&startgroup=true"
+            )
+        ],
+        [
+            InlineKeyboardButton("🩵 Kanal", url="https://t.me/MaviDuyuru"),
+            InlineKeyboardButton("✖️ Kapat", callback_data="close"),
         ],
     ]
     return buttons
