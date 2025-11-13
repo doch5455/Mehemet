@@ -395,22 +395,21 @@ def telegram_markup_timer(_, chat_id, played, dur, videoid):
     ]
     return buttons
 
-
 def stream_markup(_, videoid, chat_id):
     buttons = [
         [
             InlineKeyboardButton(
-                text="➕ 𝐁𝐞𝐧𝐢 𝐆𝐫𝐮𝐛𝐮𝐧𝐚 𝐄𝐤𝐥𝐞",
+                text="➕ 𝗕𝗲𝗻𝗶 𝗚𝗿𝘂𝗯𝘂𝗻𝗮 𝗘𝗸𝗹𝗲",
                 url=f"https://t.me/{app.username}?startgroup=true"
             )
         ],
         [
             InlineKeyboardButton(
-                text="🩵 𝐊𝐚𝐧𝐚𝐥",
+                text="🩵 𝗞𝗮𝗻𝗮𝗹",
                 url="https://t.me/MaviDuyuru"
             ),
             InlineKeyboardButton(
-                text="🗑️ 𝐊𝐚𝐩𝐚𝐭",
+                text="🗑️ 𝗞𝗮𝗽𝗮𝘁",
                 callback_data="close"
             )
         ]
