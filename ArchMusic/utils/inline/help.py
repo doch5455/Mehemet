@@ -5,6 +5,7 @@ from ArchMusic import app
 
 def help_pannel(_, START: Union[bool, int] = None):
 
+    # ALT – GERİ & KAPAT BUTONLARI
     control_btns = [
         InlineKeyboardButton(
             text=_["BACK_BUTTON"], callback_data="settingsback_helper"
@@ -16,31 +17,30 @@ def help_pannel(_, START: Union[bool, int] = None):
 
     upl = InlineKeyboardMarkup(
         [
-            # 1. sıra
+            # 1. SIRA
             [
                 InlineKeyboardButton(text=_["H_B_1"], callback_data="help_callback hb1"),
                 InlineKeyboardButton(text=_["H_B_2"], callback_data="help_callback hb2"),
             ],
 
-            # 2. sıra
+            # 2. SIRA
             [
                 InlineKeyboardButton(text=_["H_B_3"], callback_data="help_callback hb3"),
                 InlineKeyboardButton(text=_["H_B_4"], callback_data="help_callback hb4"),
             ],
 
-            # 3. sıra → SON ÜÇLÜ YAN YANA
+            # 3. SIRA → SON ÜÇ BUTTON YAN YANA
             [
                 InlineKeyboardButton(text=_["H_B_5"], callback_data="help_callback hb5"),
                 InlineKeyboardButton(text=_["H_B_6"], callback_data="help_callback hb6"),
                 InlineKeyboardButton(text=_["H_B_7"], callback_data="help_callback hb7"),
             ],
 
-            # BACK + CLOSE
+            # 4. SIRA → GERİ + KAPAT
             control_btns,
         ]
     )
     return upl
-
 
 
 
