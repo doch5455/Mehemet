@@ -219,11 +219,11 @@ song_9 : "Youtube'dan şarkı indirilemedi\n\n**Nedeni:** {0}"
 song_10 : "Sunuculardan telegrama yüklenemedi."
 song_11 : "**Yükleme Başladı\n\nYükleme hızı yavaş olabilir. Lütfen bekleyin...** 🪐 "
 
-queue_1 : "→ **Lütfen Bekleyin..** **__Sıra Alınıyor...__** "
-queue_2 : "→ **Sırada Malesef Hiçbir Sey Yok.** "
-queue_3 : "→ <u>**Sıradaki Parçalar:**</u> [**Sıradaki Parçalara Buradan Bakabilirsiniz**]({0})"
-queue_4 : "✨🌙❝Sıraya Eklendi🌙✨ {0}\n\n💠📖 𝘽𝙄𝙇𝙂𝙄: 📖💠\n\n{1}\n\n⏳🌟 𝙎𝙐𝙍𝙀: 🌟⏳ {2}\n\n👤💫 𝙏𝘼𝙇𝙀𝙋 𝙀𝘿𝙀𝙉: 💫👤 \n\n{3}\n"
-queue_5 : "**Sırada Sadece Bir Parça Var**, **Lütfen Biraz Daha Parça Ekleyin.**"
+queue_1 : "Lütfen bekleyin... Sıra alınıyor."
+queue_2 : "Sırada hiçbir şey yok."
+queue_3 : "Sıradaki Parçalar: Sıradaki parçalara buradan bakabilirsiniz: {0}"
+queue_4 : "Sıraya eklendi.\n\nBilgi:\n{1}\n\nSüre: {2}\n\nTalep Eden:\n{3}"
+queue_5 : "Sırada sadece bir parça var. Lütfen daha fazla parça ekleyin."
 
 #  BY
 stream_1: "𝗬𝗔𝗬𝗜𝗡 𝗕𝗔𝗦̧𝗟𝗔𝗗𝗜\n\n𝗕𝗜𝗟𝗚𝗜: {0}\n𝗦𝗨̈𝗥𝗘: {2}\n𝗧𝗔𝗟𝗘𝗣 𝗘𝗗𝗘𝗡: {3}"
